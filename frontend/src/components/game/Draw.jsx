@@ -149,11 +149,11 @@ const Draw = ({socket, isDrawingRef, isDrawFinish, isShowRank, isYourTurn}) => {
         ctx.current.lineWidth = lineWidth
         socket.emit("changeLineWidth", lineWidth)
     }
-    // function clearCanvas(){
-    //     ctx.current.clearRect(0, 0, canvas.width, canvas.height);
-    //     CANVAS_STAGES = [];
-    //     socket.emit("clearCanvas");
-    // }
+    function clearCanvas(){
+        ctx.current.clearRect(0, 0, canvas.width, canvas.height);
+        CANVAS_STAGES = [];
+        socket.emit("clearCanvas");
+    }
     // function undo(){   
     //     let index = CANVAS_STAGES.length - 1
     //     if(index < 0){
