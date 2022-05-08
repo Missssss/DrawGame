@@ -20,41 +20,41 @@ const Draw = ({socket, isDrawingRef, isDrawFinish, isShowRank, isYourTurn}) => {
         canvasInit();
         canvas.addEventListener("mousedown", downHandler)
 
-        // //-------監聽事件
-        // socket.on("draw", function(value){
-        //     // console.log(value)
-        //     let {startPointX, startPointY, endPointX, endPointY} = value
-        //     ctx.current.beginPath();
-        //     ctx.current.moveTo(startPointX, startPointY);
-        //     ctx.current.lineTo(endPointX, endPointY);
-        //     ctx.current.stroke();
-        // })
-        // socket.on("recordStage", function(value){
-        //     CANVAS_STAGES.push(ctx.current.getImageData(0, 0, canvas.width, canvas.height))
-        // })
-        // socket.on("changeColor", function(value){
-        //     ctx.current.strokeStyle = value;
-        // })
-        // socket.on("changeLineWidth", function(value){
-        //     ctx.current.lineWidth = value;
-        // })
-        // socket.on("clearCanvas", function(value){
-        //     ctx.current.clearRect(0, 0, canvas.width, canvas.height);
-        //     CANVAS_STAGES = [];
-        // })
-        // socket.on("undo", function(value){
-        //     let index = CANVAS_STAGES.length - 1
-        //     if(index < 0){
-        //         return;
-        //     }
+        //-------監聽事件
+        socket.on("draw", function(value){
+            // console.log(value)
+            let {startPointX, startPointY, endPointX, endPointY} = value
+            ctx.current.beginPath();
+            ctx.current.moveTo(startPointX, startPointY);
+            ctx.current.lineTo(endPointX, endPointY);
+            ctx.current.stroke();
+        })
+        socket.on("recordStage", function(value){
+            CANVAS_STAGES.push(ctx.current.getImageData(0, 0, canvas.width, canvas.height))
+        })
+        socket.on("changeColor", function(value){
+            ctx.current.strokeStyle = value;
+        })
+        socket.on("changeLineWidth", function(value){
+            ctx.current.lineWidth = value;
+        })
+        socket.on("clearCanvas", function(value){
+            ctx.current.clearRect(0, 0, canvas.width, canvas.height);
+            CANVAS_STAGES = [];
+        })
+        socket.on("undo", function(value){
+            let index = CANVAS_STAGES.length - 1
+            if(index < 0){
+                return;
+            }
 
-        //     if(index == 0){
-        //         ctx.current.clearRect(0, 0, canvas.width, canvas.height)
-        //     }else{
-        //         CANVAS_STAGES.pop(); 
-        //         ctx.current.putImageData(CANVAS_STAGES[index-1], 0, 0);
-        //     }
-        // })
+            if(index == 0){
+                ctx.current.clearRect(0, 0, canvas.width, canvas.height)
+            }else{
+                CANVAS_STAGES.pop(); 
+                ctx.current.putImageData(CANVAS_STAGES[index-1], 0, 0);
+            }
+        })
     }, [])
 
     // useEffect(() => {
