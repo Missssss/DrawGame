@@ -158,141 +158,141 @@ const Game = ({socket, user}) =>{
         gameInit();
     },[]);
 
-    // useEffect(() => {
-    //     console.log("1111111111111")
-    //     if(!canSocketInit){
-    //         console.log("canSocketInit:", canSocketInit)
-    //         return;
-    //     }
+    useEffect(() => {
+        console.log("1111111111111")
+        if(!canSocketInit){
+            console.log("canSocketInit:", canSocketInit)
+            return;
+        }
 
-    //     socket.on("playerJoin", (room) => {
-    //         setPlayerAndGame(room);
-    //         console.log("plyerJoin", room.playerList)
-    //     })
+        socket.on("playerJoin", (room) => {
+            setPlayerAndGame(room);
+            console.log("plyerJoin", room.playerList)
+        })
 
-    //     // TODO emit 來的room不是完整的  //玩家離開後holder drawer的影響
-    //     socket.on("playerLeave", (room) => {
-    //         console.log("plyerLeave1",room);
+        // TODO emit 來的room不是完整的  //玩家離開後holder drawer的影響
+        socket.on("playerLeave", (room) => {
+            console.log("plyerLeave1",room);
 
-    //         setPlayerList((pre) => {
-    //             console.log("plyerLeave2",pre);
-    //             let newPlayerList = JSON.parse(JSON.stringify(pre));
-    //             newPlayerList = newPlayerList.filter((player) => player.userId != room.currUserId)
-    //             gameInfo.playerList = newPlayerList;
-    //             gameInfo.playerCount = newPlayerList.length;
-    //             setGameInfo({...gameInfo});
-    //             return newPlayerList;
-    //         });
-    //     })
-    //     socket.on("gameStart", (room) => {
-    //         setIsStart(true);
-    //         setDuration(ROUND_DURATION);
-    //         if(room.drawUser.userId == gameInfo.currUserId){
-    //             setIsYourTurn(true);
-    //         }
-    //         setPlayerAndGame(room);
-    //         console.log("socket.on gameStart", room.drawUser)
-    //     })
-    //     socket.on("gameRiddle", (room) => {
-    //         setRiddle(room.riddle);
-    //         console.log("socket.on gameRiddle", room.riddle)
-    //     })
-    //     socket.on("missRound", (room) => {
-    //         setPlayerAndGame(room);
-    //         setIsMiss(true);
-    //         setDuration(MISS_DURATION);
-    //         console.log("socket.on missRound", room.drawUser)
-    //     })
-    //     socket.on("nextRound", (room) => {
-    //         console.log("socket.on nextRound", room);
-    //         bingoCountRef.current = 0;  //breakView後在設為0 如果在finishRoud設可能會顯示missView
-    //         let lastPlayerList = room.playerList;
-    //         let drawUserIndex = 0;
-    //         //找出下一 round user
-    //         for(let i = 0; i < lastPlayerList.length; i++){
-    //             if(lastPlayerList[i].userId == room.drawUser.userId){
-    //                 drawUserIndex = (i + 1) % lastPlayerList.length;
-    //                 break;
-    //             }
-    //         }
-    //         room.drawUser = lastPlayerList[drawUserIndex];
-    //         room.isStart = true;
-    //         setPlayerAndGame(room);
-    //         if(user.userId == lastPlayerList[drawUserIndex].userId){
-    //             socket.emit("gameStart", room);
-    //             console.log("socket.emit gameStart", room)
-    //         }
-    //     })
-    //     socket.on("finishRound", (room) => {
-    //         setRiddle(null);
-    //         let rank = [...room.playerList];
-    //         rank.sort(function(a, b){
-    //             return b.score - a.score
-    //         })
-    //         setRankList(rank);
-    //         if(rank[0].score >= room.score){
-    //             setIsShowRank(true);
-    //             return;
-    //         }
+            setPlayerList((pre) => {
+                console.log("plyerLeave2",pre);
+                let newPlayerList = JSON.parse(JSON.stringify(pre));
+                newPlayerList = newPlayerList.filter((player) => player.userId != room.currUserId)
+                gameInfo.playerList = newPlayerList;
+                gameInfo.playerCount = newPlayerList.length;
+                setGameInfo({...gameInfo});
+                return newPlayerList;
+            });
+        })
+        socket.on("gameStart", (room) => {
+            setIsStart(true);
+            setDuration(ROUND_DURATION);
+            if(room.drawUser.userId == gameInfo.currUserId){
+                setIsYourTurn(true);
+            }
+            setPlayerAndGame(room);
+            console.log("socket.on gameStart", room.drawUser)
+        })
+        socket.on("gameRiddle", (room) => {
+            setRiddle(room.riddle);
+            console.log("socket.on gameRiddle", room.riddle)
+        })
+        socket.on("missRound", (room) => {
+            setPlayerAndGame(room);
+            setIsMiss(true);
+            setDuration(MISS_DURATION);
+            console.log("socket.on missRound", room.drawUser)
+        })
+        socket.on("nextRound", (room) => {
+            console.log("socket.on nextRound", room);
+            bingoCountRef.current = 0;  //breakView後在設為0 如果在finishRoud設可能會顯示missView
+            let lastPlayerList = room.playerList;
+            let drawUserIndex = 0;
+            //找出下一 round user
+            for(let i = 0; i < lastPlayerList.length; i++){
+                if(lastPlayerList[i].userId == room.drawUser.userId){
+                    drawUserIndex = (i + 1) % lastPlayerList.length;
+                    break;
+                }
+            }
+            room.drawUser = lastPlayerList[drawUserIndex];
+            room.isStart = true;
+            setPlayerAndGame(room);
+            if(user.userId == lastPlayerList[drawUserIndex].userId){
+                socket.emit("gameStart", room);
+                console.log("socket.emit gameStart", room)
+            }
+        })
+        socket.on("finishRound", (room) => {
+            setRiddle(null);
+            let rank = [...room.playerList];
+            rank.sort(function(a, b){
+                return b.score - a.score
+            })
+            setRankList(rank);
+            if(rank[0].score >= room.score){
+                setIsShowRank(true);
+                return;
+            }
 
-    //         setPlayerAndGame(room);
-    //         setIsDrawFinish(true);
-    //         setDuration(BREAK_DURATION);
-    //         console.log("socket.on finishRound", room.drawUser);
-    //     })
+            setPlayerAndGame(room);
+            setIsDrawFinish(true);
+            setDuration(BREAK_DURATION);
+            console.log("socket.on finishRound", room.drawUser);
+        })
 
-    //     socket.on("bingo", (room) => {
-    //         bingoCountRef.current += 1;
-    //         //計分10至1  //畫者得3分
-    //         let point = 11 - bingoCountRef.current;
-    //         point = point > 0? point: 1
+        socket.on("bingo", (room) => {
+            bingoCountRef.current += 1;
+            //計分10至1  //畫者得3分
+            let point = 11 - bingoCountRef.current;
+            point = point > 0? point: 1
 
-    //         for(let player of room.playerList){
-    //             if(player.userId == room.currUserId){
-    //                 player.score = player.score? (player.score + point): point;
-    //             }
-    //             if(player.userId == room.drawUser.userId){
-    //                 player.score = player.score? (player.score + BONUS): BONUS;
-    //             }
-    //         }
-    //         setPlayerAndGame(room);
+            for(let player of room.playerList){
+                if(player.userId == room.currUserId){
+                    player.score = player.score? (player.score + point): point;
+                }
+                if(player.userId == room.drawUser.userId){
+                    player.score = player.score? (player.score + BONUS): BONUS;
+                }
+            }
+            setPlayerAndGame(room);
 
-    //         if(gameInfo.currUserId == room.currUserId){
-    //             setScore(pre => pre + point);
-    //         } 
-    //         if(gameInfo.currUserId == room.drawUser.userId){
-    //             setScore(pre => pre + BONUS);
-    //         }
+            if(gameInfo.currUserId == room.currUserId){
+                setScore(pre => pre + point);
+            } 
+            if(gameInfo.currUserId == room.drawUser.userId){
+                setScore(pre => pre + BONUS);
+            }
 
-    //         //判斷是否進入下一回合
-    //         if(bingoCountRef.current < room.playerList.length - 1){
-    //             return;
-    //         }
-    //         if(isDrawingRef.current){
-    //             setIsYourTurn(false);
-    //             isDrawingRef.current = false;
-    //             socket.emit("finishRound", room);  //注意要emit room 因為丟gameInfo會丟到當初on時舊的的狀態
-    //             console.log("socket.emit finishRound", room);
-    //         }
-    //         console.log("socket.on bingo", bingoCountRef.current);
-    //     })
+            //判斷是否進入下一回合
+            if(bingoCountRef.current < room.playerList.length - 1){
+                return;
+            }
+            if(isDrawingRef.current){
+                setIsYourTurn(false);
+                isDrawingRef.current = false;
+                socket.emit("finishRound", room);  //注意要emit room 因為丟gameInfo會丟到當初on時舊的的狀態
+                console.log("socket.emit finishRound", room);
+            }
+            console.log("socket.on bingo", bingoCountRef.current);
+        })
 
-    //     socket.emit("joinGame", gameInfo); //發送給roomlist
-    //     console.log("socket emit joinGame:",gameInfo)
+        socket.emit("joinGame", gameInfo); //發送給roomlist
+        console.log("socket emit joinGame:",gameInfo)
 
 
-    //     return () => {
-    //         socket.off("playerJoin");
-    //         socket.off("plyerLeave");
-    //         socket.off("gameStart");
-    //         socket.off("gameRiddle");
-    //         socket.off("missRound");
-    //         socket.off("nextRound");
-    //         socket.off("finishRound");
-    //         socket.off("bingo");
-    //         socket.emit("leaveGame", gameInfo); //按上一頁會觸發(因為按上一頁socket不會斷)
-    //     }
-    // },[canSocketInit])
+        return () => {
+            socket.off("playerJoin");
+            socket.off("plyerLeave");
+            socket.off("gameStart");
+            socket.off("gameRiddle");
+            socket.off("missRound");
+            socket.off("nextRound");
+            socket.off("finishRound");
+            socket.off("bingo");
+            socket.emit("leaveGame", gameInfo); //按上一頁會觸發(因為按上一頁socket不會斷)
+        }
+    },[canSocketInit])
 
     // //控制Rank 出現20秒
     // useEffect(() => {
@@ -546,20 +546,20 @@ const Game = ({socket, user}) =>{
         socket.emit("gameRiddle", gameInfo);
         console.log("socket.emit gameRiddle", riddle);
     }
-    // function setPlayerAndGame(room){
-    //     //update playerList
-    //     setPlayerList(room.playerList);
+    function setPlayerAndGame(room){
+        //update playerList
+        setPlayerList(room.playerList);
 
-    //     //update gameInfo
-    //     let newGameInfo = JSON.parse(JSON.stringify(gameInfo));
-    //     newGameInfo.playerList = room.playerList;
-    //     newGameInfo.playerCount = room.playerList.length;
-    //     newGameInfo.currUserId = user.userId;
-    //     newGameInfo.holder = room.playerList[0];
-    //     newGameInfo.drawUser = room.drawUser
-    //     setGameInfo(newGameInfo);
-    //     console.log("newGameInfo", newGameInfo)
-    // }
+        //update gameInfo
+        let newGameInfo = JSON.parse(JSON.stringify(gameInfo));
+        newGameInfo.playerList = room.playerList;
+        newGameInfo.playerCount = room.playerList.length;
+        newGameInfo.currUserId = user.userId;
+        newGameInfo.holder = room.playerList[0];
+        newGameInfo.drawUser = room.drawUser
+        setGameInfo(newGameInfo);
+        console.log("newGameInfo", newGameInfo)
+    }
     
 
     return (
