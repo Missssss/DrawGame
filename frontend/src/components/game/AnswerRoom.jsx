@@ -45,12 +45,12 @@ const AnswerRoom = ({socket, riddle, user, room, isDrawFinish, isDrawingRef, isS
             setIsBingo(false);
         }
     }, [isDrawFinish])
-    // useEffect(() => {
-    //     if(isShowRank){
-    //         setChat([]);
-    //         setIsBingo(false);
-    //     }
-    // }, [isShowRank])
+    useEffect(() => {
+        if(isShowRank){
+            setChat([]);
+            setIsBingo(false);
+        }
+    }, [isShowRank])
 
 
     function onTextChange(e){
