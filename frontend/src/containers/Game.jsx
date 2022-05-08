@@ -531,21 +531,21 @@ const Game = ({socket, user}) =>{
         }
     }
 
-    // function  goStart(e){
-    //     gameInfo.isStart = true;
-    //     gameInfo.drawUser = user;
-    //     socket.emit("gameStart", gameInfo);
-    //     console.log("socket.emit gameStart");
-    // }
-    // function chooseRiddle(e){
-    //     let riddle = e.target.innerHTML;
-    //     isDrawingRef.current = true;
-    //     console.log("isDrawingRef.current=========",isDrawingRef.current)
-    //     setRiddle(riddle);
-    //     gameInfo.riddle= riddle;
-    //     socket.emit("gameRiddle", gameInfo);
-    //     console.log("socket.emit gameRiddle", riddle);
-    // }
+    function  goStart(e){
+        gameInfo.isStart = true;
+        gameInfo.drawUser = user;
+        socket.emit("gameStart", gameInfo);
+        console.log("socket.emit gameStart");
+    }
+    function chooseRiddle(e){
+        let riddle = e.target.innerHTML;
+        isDrawingRef.current = true;
+        console.log("isDrawingRef.current=========",isDrawingRef.current)
+        setRiddle(riddle);
+        gameInfo.riddle= riddle;
+        socket.emit("gameRiddle", gameInfo);
+        console.log("socket.emit gameRiddle", riddle);
+    }
     // function setPlayerAndGame(room){
     //     //update playerList
     //     setPlayerList(room.playerList);
