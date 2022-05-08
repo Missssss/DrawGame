@@ -7,7 +7,7 @@ const frameStyle = {
     width:"70%",
     height:"500px",
     margin:"50px auto",
-    backgroundColor:"palegreen",
+    // backgroundColor:"palegreen",
 }
 const innerBoxStyle = {
     width:"50%",
@@ -38,6 +38,7 @@ const inputStyle = {
     height:"40px",
     margin:"10px 10px",
     fontSize:"20px",
+    textAlign:"center",
     // backgroundColor:"palegreen",
 }
 const buttonStyle = {
@@ -50,22 +51,25 @@ const buttonStyle = {
     // backgroundColor:"palegreen",
 }
 
-const Home = ({setUserName, setUserId}) =>{
-    const [tmpUserName, setTmpUserName] = useState("");
+const Home = ({setUser}) =>{
+    const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
     const navigate = useNavigate();
-    async function getUserIdAndJoinGame(){
-        if(tmpUserName == ""){
+
+    async function getUserIdAndSetUser(){
+        let resData = await axios.get("http://localhost:3000/api/1.0/user/userId");
+        let userId = resData.data.userId  + "-" + userName;
+        let user = {userId, userName, email, password};
+        setUser(user);
+    }
+
+    async function joinGame(){
+        if(userName == ""){
             alert("請輸入暱稱");
             return
         }
-        let resData = await axios.get("http://localhost:3000/api/1.0/user/userId");
-        let user = resData.data;
-        setUserName(tmpUserName);
-        setUserId(user.userId + "-" + tmpUserName);
-        
+        await getUserIdAndSetUser();
         try{
             let roomData = await axios.get("http://localhost:3000/api/1.0/room/random");
             navigate(`/game/${roomData.data.roomId}`);
@@ -73,6 +77,15 @@ const Home = ({setUserName, setUserId}) =>{
             console.log("game page: ", err.response.data);
             alert("房間已滿， \r\n請稍等一下或建立新房間。")
         }
+    }
+
+    async function goRoomList(){
+        if(userName == ""){
+            alert("請輸入暱稱");
+            return
+        }
+        await getUserIdAndSetUser();
+        navigate(`/rooms`);
     }
     
 
@@ -88,14 +101,14 @@ const Home = ({setUserName, setUserId}) =>{
                     </div>
                     <div style={divFlexStyle}>
                         <label>暱稱 </label>
-                        <input className="component_border" type="text" style={inputStyle} onChange={(e)=>setTmpUserName(e.target.value)} />
+                        <input className="component_border" type="text" style={inputStyle} onChange={(e)=>setUserName(e.target.value)} />
                     </div>
                     <div style={divFlexStyle}>
-                        <Link to="/rooms">
-                            <button  className="component_border" style={buttonStyle}>房間</button>
-                        </Link>
+                        {/* <Link to="/rooms"> */}
+                            <button  className="component_border" style={buttonStyle} onClick={goRoomList}>房間</button>
+                        {/* </Link> */}
                         {/* <Link to="/game"> */}
-                            <button  className="component_border" style={buttonStyle} onClick={getUserIdAndJoinGame} >快速加入</button>
+                            <button  className="component_border" style={buttonStyle} onClick={joinGame} >快速加入</button>
                         {/* </Link> */}
                     </div>                    
                 </div>

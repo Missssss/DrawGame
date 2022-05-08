@@ -41,24 +41,25 @@ const buttonStyle = {
     // backgroundColor:"palegreen",
 }
 
-// const socket = io(process.env.REACT_APP_SOCKETIO_URL);
+const socket = io(process.env.REACT_APP_SOCKETIO_URL);
 
-const Create = ({setCurrentRoomId, setRoomInfo}) =>{
+const Create = ({setRoomInfo}) =>{
     const [mode, setMode] = useState("general");
     const [theme, setTheme] = useState("general");
     const [playerLimit, setPlayerLimit] = useState(5);
-    const [score, setScore] = useState(70);
+    const [score, setScore] = useState(50);
 
     const navigate = useNavigate();
     async function createRoom(){
         let resData = await axios.post("http://localhost:3000/api/1.0/room", {mode, theme, playerLimit, score})
         let roomInfo = resData.data; 
-        setCurrentRoomId(roomInfo.roomId);
         setRoomInfo(roomInfo);
 
+        socket.emit("createRoom", roomInfo);
+        console.log(`createRoom: ${roomInfo.roomId}`)
         navigate(`/game/${roomInfo.roomId}`)
     }
-
+    
     useEffect(() => {
         console.log("changeSetting")
     },[mode, theme, playerLimit, score])
@@ -99,6 +100,7 @@ const Create = ({setCurrentRoomId, setRoomInfo}) =>{
             <div style={divFlexStyle}>
                 <label style={lebelStyle}>目標分數</label>
                 <select  style={inputStyle} className="component_border" onChange={(e)=>setScore(e.target.value)}>
+                    <option value="50">50</option>
                     <option value="70">70</option>
                     <option value="100">100</option>
                     <option value="120">120</option>
