@@ -74,11 +74,11 @@ const RANK_DURATION = 20;
 const BONUS = 3
 
 const Game = ({socket, user}) =>{
-    // // const [socket, setSocket] = useState(null);
-    // const [canSocketInit, setCanSocketInit] = useState(false)
-    // const [playerList, setPlayerList] = useState([]);
-    // const [avatar, setAvatar] = useState(["happy","haha","cry","kiss","wink","bored","neutro","cold","sob","kookoo","surprise","wow","angry","sleep","cynical",]);
-    // const [gameInfo, setGameInfo] = useState(null);
+    // const [socket, setSocket] = useState(null);
+    const [canSocketInit, setCanSocketInit] = useState(false)
+    const [playerList, setPlayerList] = useState([]);
+    const [avatar, setAvatar] = useState(["happy","haha","cry","kiss","wink","bored","neutro","cold","sob","kookoo","surprise","wow","angry","sleep","cynical",]);
+    const [gameInfo, setGameInfo] = useState(null);
     
     // const [score, setScore] = useState(0);
     // const [duration, setDuration] = useState(ROUND_DURATION);
@@ -100,63 +100,63 @@ const Game = ({socket, user}) =>{
     
     // console.log("socket.id:", socket.id);
     // console.log("playerList:", playerList);
-    // useEffect(() => {
-    //     async function gameInit(){
-    //         // if(!user.userId){
-    //         //     alert("請設定暱稱")
-    //         //     navigate("/")
-    //         // }
+    useEffect(() => {
+        async function gameInit(){
+            // if(!user.userId){
+            //     alert("請設定暱稱")
+            //     navigate("/")
+            // }
 
-    //         // window.onbeforeunload =  function (e) {
-    //         //     console.log("bbbbbb")
-    //         //     alert("bbbbbb")
-    //         // };
+            // window.onbeforeunload =  function (e) {
+            //     console.log("bbbbbb")
+            //     alert("bbbbbb")
+            // };
 
-    //         // window.addEventListener("visibilityState", function(){
-    //         //     console.log("eeeeeee")
-    //         //     alert("eeeeeee")
-    //         // })
-    //         // window.addEventListener("popstate", function(){
-    //         //     console.log("popstate")
-    //         //     alert("popstate")
-    //         // })
-    //         try{
-    //             let resData = await axios.get(`http://localhost:3000/api/1.0/room/${roomId}`);
-    //             let gameRoom = resData.data;
-    //             if(gameRoom.playerCount >= gameRoom.playerLimit){
-    //                 alert("人數已滿");
-    //                 navigate("/rooms")
-    //                 return;
-    //             }
-    //             // if(gameRoom.isStart){
-    //             //     alert("遊戲已開始\n請選擇其他房間");
-    //             //     navigate("/rooms")
-    //             //     return;
-    //             // }
-    //             let newPlayerList = gameRoom.playerList.filter((player) => player.userId != user.userId);
-    //             user.score = 0;
-    //             newPlayerList.push(user);
-    //             gameRoom.playerList = newPlayerList;
-    //             gameRoom.currUserId = user.userId;  //記錄此client的使用者 當要刪掉時很好用
-    //             gameRoom.holder = newPlayerList[0];
+            // window.addEventListener("visibilityState", function(){
+            //     console.log("eeeeeee")
+            //     alert("eeeeeee")
+            // })
+            // window.addEventListener("popstate", function(){
+            //     console.log("popstate")
+            //     alert("popstate")
+            // })
+            try{
+                let resData = await axios.get(`http://localhost:3000/api/1.0/room/${roomId}`);
+                let gameRoom = resData.data;
+                if(gameRoom.playerCount >= gameRoom.playerLimit){
+                    alert("人數已滿");
+                    navigate("/rooms")
+                    return;
+                }
+                // if(gameRoom.isStart){
+                //     alert("遊戲已開始\n請選擇其他房間");
+                //     navigate("/rooms")
+                //     return;
+                // }
+                let newPlayerList = gameRoom.playerList.filter((player) => player.userId != user.userId);
+                user.score = 0;
+                newPlayerList.push(user);
+                gameRoom.playerList = newPlayerList;
+                gameRoom.currUserId = user.userId;  //記錄此client的使用者 當要刪掉時很好用
+                gameRoom.holder = newPlayerList[0];
 
-    //             //第0 round holder先
-    //             // if(round == 0 && newPlayerList[0].userId == user.userId){
-    //             //     gameRoom.drawUser = user;
-    //             //     setIsYourTurn(true)
-    //             // }
-    //             setPlayerList(newPlayerList);
-    //             setGameInfo(gameRoom);
-    //             setCanSocketInit(true);
+                //第0 round holder先
+                // if(round == 0 && newPlayerList[0].userId == user.userId){
+                //     gameRoom.drawUser = user;
+                //     setIsYourTurn(true)
+                // }
+                setPlayerList(newPlayerList);
+                setGameInfo(gameRoom);
+                setCanSocketInit(true);
 
-    //         } catch (err) {
-    //             console.log("game page: room not exit", err);
-    //             navigate("/")
-    //             return;
-    //         }
-    //     } 
-    //     gameInit();
-    // },[]);
+            } catch (err) {
+                console.log("game page: room not exit", err);
+                navigate("/")
+                return;
+            }
+        } 
+        gameInit();
+    },[]);
 
     // useEffect(() => {
     //     console.log("1111111111111")

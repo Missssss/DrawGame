@@ -1,0 +1,81 @@
+canvas {
+    /* box-shadow: -3px 2px 9px 6px palegreen; */
+    border-bottom: 3px solid black;
+    /* width: 680px;
+    height: 315px; */
+}
+
+.tools {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.tools .clear {
+    height: 30px;
+    width: 30px;
+    border: 3px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    background-image: url('../img/bin.png');
+    background-size: 100% 100% ;
+    background-repeat: no-repeat;
+}
+
+.tools .undo {
+    height: 30px;
+    width: 30px;
+    border: 3px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    background-image: url('../img/back.png');
+    background-size: 100% 100% ;
+    background-repeat: no-repeat;
+}
+
+.tools .eraser{
+    height: 30px;
+    width: 30px;
+    border: 3px solid black;
+    border-radius: 10px;
+    cursor: pointer;
+    box-sizing: border-box;
+    background: white;
+    background-image: url('../img/eraser.png');
+    background-size: 100% 100% ;
+    background-repeat: no-repeat;
+}
+.tools .color {
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 3px solid black;
+}
+
+.tools .color-pocker {
+    height: 40px;
+    width: 40px;
+    border: 0px solid black;
+    border-radius: 30%;
+    cursor: pointer;
+    background-image: url('../img/colorwheel.png');
+    background-size: 100% 100% ;
+    background-repeat: no-repeat;
+    /* -webkit-appearance: none; */
+}
+.color-pocker::-webkit-color-swatch-wrapper{
+    display: none;
+}
+.color-pocker::-webkit-color-swatch{
+    border: none;
+}
+
+.tools .pen-range {
+    cursor: pointer;
+    /* border: 3px solid black; */
+}
