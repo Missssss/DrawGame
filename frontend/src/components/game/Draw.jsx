@@ -144,11 +144,11 @@ const Draw = ({socket, isDrawingRef, isDrawFinish, isShowRank, isYourTurn}) => {
         console.log("changeColor", color)
         socket.emit("changeColor", color)
     }
-    // function changeLineWidth(e){
-    //     let lineWidth = e.target.value;
-    //     ctx.current.lineWidth = lineWidth
-    //     socket.emit("changeLineWidth", lineWidth)
-    // }
+    function changeLineWidth(e){
+        let lineWidth = e.target.value;
+        ctx.current.lineWidth = lineWidth
+        socket.emit("changeLineWidth", lineWidth)
+    }
     // function clearCanvas(){
     //     ctx.current.clearRect(0, 0, canvas.width, canvas.height);
     //     CANVAS_STAGES = [];
