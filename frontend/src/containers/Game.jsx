@@ -314,32 +314,32 @@ const Game = ({socket, user}) =>{
     //     }
     // }, [isShowRank])
     
-    // //控制是否emit missRound,進而出現miss畫面
-    // useEffect(() => {
-    //     if(isYourTurn){
-    //         setTimeout(() => {
-    //             if(!isDrawingRef.current && bingoCountRef.current == 0){
-    //                 setIsYourTurn(false);
-    //                 socket.emit("missRound", gameInfo);
-    //                 console.log("socket.emit missRound")
-    //             }
-    //         }, CHOICE_DURATION * 1000)
-    //     }
-    // },[isYourTurn])
+    //控制是否emit missRound,進而出現miss畫面
+    useEffect(() => {
+        if(isYourTurn){
+            setTimeout(() => {
+                if(!isDrawingRef.current && bingoCountRef.current == 0){
+                    setIsYourTurn(false);
+                    socket.emit("missRound", gameInfo);
+                    console.log("socket.emit missRound")
+                }
+            }, CHOICE_DURATION * 1000)
+        }
+    },[isYourTurn])
 
-    // //missView 8秒後 進下一round
-    // useEffect(() => {
-    //     if(isMiss){
-    //         setTimeout(() => {
-    //             setIsMiss(false);
-    //             //統一由drawUser通知  //TODO 萬一此user離開
-    //             if(user.userId == gameInfo.drawUser.userId){
-    //                 socket.emit("nextRound", gameInfo);
-    //                 console.log("socket.emit nextRound", gameInfo)
-    //             }
-    //         }, MISS_DURATION * 1000)
-    //     }
-    // },[isMiss])
+    //missView 8秒後 進下一round
+    useEffect(() => {
+        if(isMiss){
+            setTimeout(() => {
+                setIsMiss(false);
+                //統一由drawUser通知  //TODO 萬一此user離開
+                if(user.userId == gameInfo.drawUser.userId){
+                    socket.emit("nextRound", gameInfo);
+                    console.log("socket.emit nextRound", gameInfo)
+                }
+            }, MISS_DURATION * 1000)
+        }
+    },[isMiss])
 
     // //畫完後由drawUser emit roundFinish 進而出現break畫面
     // useEffect(() => {
