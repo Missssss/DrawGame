@@ -57,23 +57,23 @@ const Draw = ({socket, isDrawingRef, isDrawFinish, isShowRank, isYourTurn}) => {
         })
     }, [])
 
-    // useEffect(() => {
-    //     if(isYourTurn){
-    //         canvasInit();
-    //     }
-    // }, [isYourTurn]);
-    // useEffect(() => {
-    //     if(isDrawFinish){
-    //         clearCanvas();
-    //         canvasInit();
-    //     }
-    // }, [isDrawFinish]);
-    // useEffect(() => {
-    //     if(isShowRank){
-    //         clearCanvas();
-    //         canvasInit();
-    //     }
-    // }, [isShowRank]);
+    useEffect(() => {
+        if(isYourTurn){
+            canvasInit();
+        }
+    }, [isYourTurn]);
+    useEffect(() => {
+        if(isDrawFinish){
+            clearCanvas();
+            canvasInit();
+        }
+    }, [isDrawFinish]);
+    useEffect(() => {
+        if(isShowRank){
+            clearCanvas();
+            canvasInit();
+        }
+    }, [isShowRank]);
 
 
 
