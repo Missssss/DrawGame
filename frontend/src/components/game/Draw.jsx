@@ -12,50 +12,50 @@ import Timer from './Timer'
 let startPointX, startPointY, endPointX, endPointY;
 let CANVAS_STAGES = [];
 const Draw = ({socket, isDrawingRef, isDrawFinish, isShowRank, isYourTurn}) => {
-    // let canvasRef = useRef(null);
-    // let ctx = useRef(null);
-    // let canvas = canvasRef.current;
+    let canvasRef = useRef(null);
+    let ctx = useRef(null);
+    let canvas = canvasRef.current;
    
-    // useEffect(() => {
-    //     canvasInit();
-    //     canvas.addEventListener("mousedown", downHandler)
+    useEffect(() => {
+        canvasInit();
+        canvas.addEventListener("mousedown", downHandler)
 
-    //     //-------監聽事件
-    //     socket.on("draw", function(value){
-    //         // console.log(value)
-    //         let {startPointX, startPointY, endPointX, endPointY} = value
-    //         ctx.current.beginPath();
-    //         ctx.current.moveTo(startPointX, startPointY);
-    //         ctx.current.lineTo(endPointX, endPointY);
-    //         ctx.current.stroke();
-    //     })
-    //     socket.on("recordStage", function(value){
-    //         CANVAS_STAGES.push(ctx.current.getImageData(0, 0, canvas.width, canvas.height))
-    //     })
-    //     socket.on("changeColor", function(value){
-    //         ctx.current.strokeStyle = value;
-    //     })
-    //     socket.on("changeLineWidth", function(value){
-    //         ctx.current.lineWidth = value;
-    //     })
-    //     socket.on("clearCanvas", function(value){
-    //         ctx.current.clearRect(0, 0, canvas.width, canvas.height);
-    //         CANVAS_STAGES = [];
-    //     })
-    //     socket.on("undo", function(value){
-    //         let index = CANVAS_STAGES.length - 1
-    //         if(index < 0){
-    //             return;
-    //         }
+        // //-------監聽事件
+        // socket.on("draw", function(value){
+        //     // console.log(value)
+        //     let {startPointX, startPointY, endPointX, endPointY} = value
+        //     ctx.current.beginPath();
+        //     ctx.current.moveTo(startPointX, startPointY);
+        //     ctx.current.lineTo(endPointX, endPointY);
+        //     ctx.current.stroke();
+        // })
+        // socket.on("recordStage", function(value){
+        //     CANVAS_STAGES.push(ctx.current.getImageData(0, 0, canvas.width, canvas.height))
+        // })
+        // socket.on("changeColor", function(value){
+        //     ctx.current.strokeStyle = value;
+        // })
+        // socket.on("changeLineWidth", function(value){
+        //     ctx.current.lineWidth = value;
+        // })
+        // socket.on("clearCanvas", function(value){
+        //     ctx.current.clearRect(0, 0, canvas.width, canvas.height);
+        //     CANVAS_STAGES = [];
+        // })
+        // socket.on("undo", function(value){
+        //     let index = CANVAS_STAGES.length - 1
+        //     if(index < 0){
+        //         return;
+        //     }
 
-    //         if(index == 0){
-    //             ctx.current.clearRect(0, 0, canvas.width, canvas.height)
-    //         }else{
-    //             CANVAS_STAGES.pop(); 
-    //             ctx.current.putImageData(CANVAS_STAGES[index-1], 0, 0);
-    //         }
-    //     })
-    // }, [])
+        //     if(index == 0){
+        //         ctx.current.clearRect(0, 0, canvas.width, canvas.height)
+        //     }else{
+        //         CANVAS_STAGES.pop(); 
+        //         ctx.current.putImageData(CANVAS_STAGES[index-1], 0, 0);
+        //     }
+        // })
+    }, [])
 
     // useEffect(() => {
     //     if(isYourTurn){
@@ -77,66 +77,66 @@ const Draw = ({socket, isDrawingRef, isDrawFinish, isShowRank, isYourTurn}) => {
 
 
 
-    // function canvasInit() {
-    //     canvas = canvasRef.current;
-    //     canvas.width = 680;  
-    //     canvas.height = 315; 
+    function canvasInit() {
+        canvas = canvasRef.current;
+        canvas.width = 680;  
+        canvas.height = 315; 
 
-    //     let contex = canvas.getContext("2d");
-    //     ctx.current = contex;
-    //     let DRAW_COLOR = "black"; 
-    //     let DRAW_WIDTH = "3";
-    //     ctx.current.strokeStyle = DRAW_COLOR;
-    //     ctx.current.lineWidth = DRAW_WIDTH;
-    //     ctx.current.lineCap = "round";
-    //     ctx.current.lineJoin = "round"
-    // }
+        let contex = canvas.getContext("2d");
+        ctx.current = contex;
+        let DRAW_COLOR = "black"; 
+        let DRAW_WIDTH = "3";
+        ctx.current.strokeStyle = DRAW_COLOR;
+        ctx.current.lineWidth = DRAW_WIDTH;
+        ctx.current.lineCap = "round";
+        ctx.current.lineJoin = "round"
+    }
     
-    // //-------mouse事件
-    // function downHandler(e){
-    //     //isYourTurn and 選完謎底後才能畫
-    //     if(!isDrawingRef.current){
-    //         return;
-    //     }
-    //     // 滑鼠按下去時得到座標存在變數中作為等等畫圖的起點
-    //     startPointX = e.offsetX;
-    //     startPointY = e.offsetY;
-    //     canvas.addEventListener("mousemove", moveHandler);
-    //     canvas.addEventListener("mouseup", stopHandler);
-    //     canvas.addEventListener("mouseout", stopHandler);
-    // };
+    //-------mouse事件
+    function downHandler(e){
+        //isYourTurn and 選完謎底後才能畫
+        if(!isDrawingRef.current){
+            return;
+        }
+        // 滑鼠按下去時得到座標存在變數中作為等等畫圖的起點
+        startPointX = e.offsetX;
+        startPointY = e.offsetY;
+        canvas.addEventListener("mousemove", moveHandler);
+        canvas.addEventListener("mouseup", stopHandler);
+        canvas.addEventListener("mouseout", stopHandler);
+    };
     
-    // // let ww = 0;
-    // // let hh = 0;
-    // function moveHandler(e) {
-    //     if(!isDrawingRef.current){
-    //         return;
-    //     }
-    //     // 滑鼠在移動時我們把新的座標存下來作為終點
-    //     endPointX = e.offsetX;
-    //     endPointY = e.offsetY;
+    // let ww = 0;
+    // let hh = 0;
+    function moveHandler(e) {
+        if(!isDrawingRef.current){
+            return;
+        }
+        // 滑鼠在移動時我們把新的座標存下來作為終點
+        endPointX = e.offsetX;
+        endPointY = e.offsetY;
     
-    //     // 畫圖四步驟
-    //     ctx.current.beginPath();
-    //     ctx.current.moveTo(startPointX, startPointY);
-    //     ctx.current.lineTo(endPointX, endPointY);
-    //     ctx.current.stroke();
-    //     socket.emit("draw", {startPointX, startPointY, endPointX, endPointY})
+        // 畫圖四步驟
+        ctx.current.beginPath();
+        ctx.current.moveTo(startPointX, startPointY);
+        ctx.current.lineTo(endPointX, endPointY);
+        ctx.current.stroke();
+        socket.emit("draw", {startPointX, startPointY, endPointX, endPointY})
     
-    //     // 把終點改為新的起點
-    //     startPointX = endPointX;
-    //     startPointY = endPointY;
+        // 把終點改為新的起點
+        startPointX = endPointX;
+        startPointY = endPointY;
         
-    // };
-    // function stopHandler(e){
-    //     canvas.removeEventListener("mousemove", moveHandler);
-    //     canvas.removeEventListener("mouseup", stopHandler);
-    //     canvas.removeEventListener("mouseout", stopHandler);
+    };
+    function stopHandler(e){
+        canvas.removeEventListener("mousemove", moveHandler);
+        canvas.removeEventListener("mouseup", stopHandler);
+        canvas.removeEventListener("mouseout", stopHandler);
     
-    //     //每個步驟都記錄下來
-    //     CANVAS_STAGES.push(ctx.current.getImageData(0, 0, canvas.width, canvas.height))
-    //     socket.emit("recordStage");
-    // };
+        //每個步驟都記錄下來
+        CANVAS_STAGES.push(ctx.current.getImageData(0, 0, canvas.width, canvas.height))
+        socket.emit("recordStage");
+    };
 
     // function changeColor(e){
     //     let color = e.target.style.backgroundColor || e.target.value || "white";
