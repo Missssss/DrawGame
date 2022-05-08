@@ -25,18 +25,18 @@ const ChatRoom = ({socket, riddle, user, room}) => {
     const [chat, setChat] = useState([]);
     const chatRef = useRef(null)
 
-    // useEffect(() => {
-    //     socket.on("chat", (message) => {
-    //         setChat((pre) => {
-    //             return [...pre, message]
-    //         })
-    //         chatRef.current.scrollIntoView();
-    //     })
+    useEffect(() => {
+        socket.on("chat", (message) => {
+            setChat((pre) => {
+                return [...pre, message]
+            })
+            chatRef.current.scrollIntoView();
+        })
 
-    //     return () => {
-    //         socket.off("chat");
-    //     }
-    // }, [])
+        return () => {
+            socket.off("chat");
+        }
+    }, [])
 
 
     function onTextChange(e){
