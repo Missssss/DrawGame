@@ -80,23 +80,23 @@ const Game = ({socket, user}) =>{
     const [avatar, setAvatar] = useState(["happy","haha","cry","kiss","wink","bored","neutro","cold","sob","kookoo","surprise","wow","angry","sleep","cynical",]);
     const [gameInfo, setGameInfo] = useState(null);
     
-    // const [score, setScore] = useState(0);
-    // const [duration, setDuration] = useState(ROUND_DURATION);
-    // const [isYourTurn, setIsYourTurn] = useState(false);
-    // const [riddle, setRiddle] = useState(null);
-    // const [isStart, setIsStart] = useState(false);
-    // const [round, setRound] = useState(0);
-    // const [isMiss, setIsMiss] = useState(false);
-    // const [isTimesUp, setIsTimesUp] = useState(false);
-    // const [isDrawFinish, setIsDrawFinish] = useState(false);
-    // const [isShowRank, setIsShowRank] = useState(false);
-    // const [rankList, setRankList] = useState([]);
-    // const isDrawingRef = useRef(false);  //只有drawUser會true
-    // const bingoCountRef = useRef(0)
+    const [score, setScore] = useState(0);
+    const [duration, setDuration] = useState(ROUND_DURATION);
+    const [isYourTurn, setIsYourTurn] = useState(false);
+    const [riddle, setRiddle] = useState(null);
+    const [isStart, setIsStart] = useState(false);
+    const [round, setRound] = useState(0);
+    const [isMiss, setIsMiss] = useState(false);
+    const [isTimesUp, setIsTimesUp] = useState(false);
+    const [isDrawFinish, setIsDrawFinish] = useState(false);
+    const [isShowRank, setIsShowRank] = useState(false);
+    const [rankList, setRankList] = useState([]);
+    const isDrawingRef = useRef(false);  //只有drawUser會true
+    const bingoCountRef = useRef(0)
 
 
-    // const {roomId}  = useParams();
-    // const navigate = useNavigate();
+    const {roomId}  = useParams();
+    const navigate = useNavigate();
     
     // console.log("socket.id:", socket.id);
     // console.log("playerList:", playerList);
@@ -502,34 +502,34 @@ const Game = ({socket, user}) =>{
         }
     }
 
-    // const rankView = () => {
-    //     const rankStyle = {
-    //         position:"absolute",
-    //         left: "240px",
-    //         top:"30px",
-    //         width:"400px",
-    //         height:"100px",
-    //         margin:"10px 10px",
-    //     }
-    //     const rankPlayerStyle = {
-    //         margin:"10px ",
-    //     }
-    //     const rankImgStyle = {
-    //         width:"150px",
-    //         height:"130px",
-    //         margin:"10px 0px",
-    //     }
-    //     if(isShowRank){
-    //         return(
-    //             <div style={rankStyle}>
-    //                 <div style={rankPlayerStyle}>第一名 {rankList[0]?rankList[0].userName:"從缺"}</div>
-    //                 <div style={rankPlayerStyle}>第二名 {rankList[1]?rankList[1].userName:"從缺"}</div>
-    //                 <div style={rankPlayerStyle}>第三名 {rankList[2]?rankList[2].userName:"從缺"}</div>
-    //                 <img style={rankImgStyle} src={require("../img/rank.png")}></img>
-    //             </div>
-    //         )
-    //     }
-    // }
+    const rankView = () => {
+        const rankStyle = {
+            position:"absolute",
+            left: "240px",
+            top:"30px",
+            width:"400px",
+            height:"100px",
+            margin:"10px 10px",
+        }
+        const rankPlayerStyle = {
+            margin:"10px ",
+        }
+        const rankImgStyle = {
+            width:"150px",
+            height:"130px",
+            margin:"10px 0px",
+        }
+        if(isShowRank){
+            return(
+                <div style={rankStyle}>
+                    <div style={rankPlayerStyle}>第一名 {rankList[0]?rankList[0].userName:"從缺"}</div>
+                    <div style={rankPlayerStyle}>第二名 {rankList[1]?rankList[1].userName:"從缺"}</div>
+                    <div style={rankPlayerStyle}>第三名 {rankList[2]?rankList[2].userName:"從缺"}</div>
+                    <img style={rankImgStyle} src={require("../img/rank.png")}></img>
+                </div>
+            )
+        }
+    }
 
     // function  goStart(e){
     //     gameInfo.isStart = true;
