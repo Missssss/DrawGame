@@ -567,7 +567,17 @@ const Game = ({socket, user}) =>{
             <div style={divFlexStyle} >
                 <div style={playerListStyle} className="frame_border">
                     
-                    
+                {playerList.map((player) => {
+                        return <div key={player.userId} style={playerStyle} className="component_border">
+                                    <div style={divFlexStyle} >
+                                        <img style={avatarStyle} src={require(`../img/${avatar[Math.floor(Math.random()*15)]}.gif`)} /*</div>className="component_border"*/></img>
+                                        <div style={{width:"50%"}}>
+                                            <div style={playerInfoStyle} /*className="component_border"*/ >{player.userName}</div>
+                                            <div style={playerInfoStyle} /*className="component_border"*/ >得分 {player.score || 0}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                    })}
 
                 </div>
 
