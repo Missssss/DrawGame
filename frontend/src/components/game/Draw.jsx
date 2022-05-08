@@ -154,20 +154,20 @@ const Draw = ({socket, isDrawingRef, isDrawFinish, isShowRank, isYourTurn}) => {
         CANVAS_STAGES = [];
         socket.emit("clearCanvas");
     }
-    // function undo(){   
-    //     let index = CANVAS_STAGES.length - 1
-    //     if(index < 0){
-    //         return;
-    //     }
+    function undo(){   
+        let index = CANVAS_STAGES.length - 1
+        if(index < 0){
+            return;
+        }
 
-    //     if(index == 0){
-    //         ctx.current.clearRect(0, 0, canvas.width, canvas.height)
-    //     }else{
-    //         CANVAS_STAGES.pop(); 
-    //         ctx.current.putImageData(CANVAS_STAGES[index-1], 0, 0);
-    //     }
-    //     socket.emit("undo");
-    // }
+        if(index == 0){
+            ctx.current.clearRect(0, 0, canvas.width, canvas.height)
+        }else{
+            CANVAS_STAGES.pop(); 
+            ctx.current.putImageData(CANVAS_STAGES[index-1], 0, 0);
+        }
+        socket.emit("undo");
+    }
 
 
     return(
