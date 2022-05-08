@@ -21,10 +21,10 @@ const bingoStyle = {
 
 
 const AnswerRoom = ({socket, riddle, user, room, isDrawFinish, isDrawingRef, isShowRank}) => {
-    // const [message, setMessage] = useState({name:user.userName, text:""});
-    // const [chat, setChat] = useState([]);
-    // const [isBingo, setIsBingo] = useState(false);
-    // const chatRef = useRef(null)
+    const [message, setMessage] = useState({name:user.userName, text:""});
+    const [chat, setChat] = useState([]);
+    const [isBingo, setIsBingo] = useState(false);
+    const chatRef = useRef(null)
 
     // useEffect(() => {
     //     socket.on("message", (message) => {
@@ -53,31 +53,31 @@ const AnswerRoom = ({socket, riddle, user, room, isDrawFinish, isDrawingRef, isS
     // }, [isShowRank])
 
 
-    // function onTextChange(e){
-    //     setMessage({name:user.userName, text: e.target.value});
-    // }
+    function onTextChange(e){
+        setMessage({name:user.userName, text: e.target.value});
+    }
 
-    // function sendMessage(e) {
-    //     e.preventDefault();
-    //     socket.emit("message", {message, room})
-    //     console.log("socket.emit message", room)
-    //     if(message.text == riddle){
-    //         setIsBingo(true);
-    //         socket.emit("bingo", room)
-    //         console.log("socket.emit bingo", room)
-    //     }
-    //     setMessage({name:user.userName, text:""})
-    // }
+    function sendMessage(e) {
+        e.preventDefault();
+        socket.emit("message", {message, room})
+        console.log("socket.emit message", room)
+        if(message.text == riddle){
+            setIsBingo(true);
+            socket.emit("bingo", room)
+            console.log("socket.emit bingo", room)
+        }
+        setMessage({name:user.userName, text:""})
+    }
 
     
-    // const renderChat = () => {
-    //     return chat.map(({name, text}, index) => {
-    //         if(text == riddle){
-    //             return <div key={index} style={bingoStyle}>{name}: ✔ 答對了!</div>
-    //         }
-    //         return <div key={index}>{name}: {text}</div>
-    //     })
-    // }
+    const renderChat = () => {
+        return chat.map(({name, text}, index) => {
+            if(text == riddle){
+                return <div key={index} style={bingoStyle}>{name}: ✔ 答對了!</div>
+            }
+            return <div key={index}>{name}: {text}</div>
+        })
+    }
 
     return(
         <React.Fragment>
