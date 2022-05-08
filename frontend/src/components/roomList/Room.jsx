@@ -6,20 +6,21 @@ import React, { useState, useEffect, useRef } from 'react';
 
 const roomImgStyle = {
     width:"45%",
-    height:"50%",
+    height:"45%",
     margin: "0 auto",
     display:"block"
 }
 const divFlexStyle = {
+    width:"95%",
     display: "flex",
     justifyContent: "center", 
     alignItems:"center",
-    marginLeft: "10px",
+    marginLeft: "5px",
 }
 const roomInfoStyle = {
     fontSize:"25px",
     textAlign:"center",
-    width:"30%",
+    width:"70px",
     height:"10%",
     margin: "5px",
 }
@@ -35,9 +36,6 @@ const scoreCurrenStyle = {
     width:"20%",
     height:"10%",
 }
-const aaa = {hover:{
-    borderColor: "yellow",
-}}
 
 function modeTranslate(mode){
     if(mode == "general"){

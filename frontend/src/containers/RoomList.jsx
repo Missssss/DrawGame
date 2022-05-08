@@ -8,14 +8,14 @@ import Room from '../components/roomList/Room';
 const frameStyle = {
     width:"70%",
     height:"500px",
-    margin:"50px auto",
+    margin:"100px auto",
     position: "relative",
     // backgroundColor:"palegreen",
 }
 const roomListStyle = {
-    width:"90%",
+    width:"80%",
     height:"60%",
-    margin:"40px auto 10px",
+    margin:"25px auto 10px",
     overflow: "auto",
     display: "flex",
     flexWrap: "wrap", //| nowrap | wrap-reverse,
@@ -143,7 +143,7 @@ const RoomList = ({socket}) =>{
 
     return (
         <div style={frameStyle} className="frame_border">
-            <div style={{textAlign:"center", fontSize:"40px", margin:"10px auto 0px"}}>Rooms</div>
+            <div style={{textAlign:"center", fontSize:"40px", margin:"20px auto 0px"}}>Rooms</div>
             <div style={roomListStyle} className="frame_border">
                 {roomList.map((room, index) => {
                     return <Room 

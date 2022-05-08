@@ -11,10 +11,10 @@ let roomMap = {} ////
 const createRoom =  async (req, res) => {
     let config = req.body;
     let roomId = uuidv4()
-    roomMap[roomId] = {...config, roomId, playerCount:1} ////
+    roomMap[roomId] = {...config, roomId, playerCount:1, playerList:[]} ////
 
     let roomKey = ROOM_PREFIX + roomId;
-    await redisClient.set(roomKey, JSON.stringify({...config, roomId, playerCount:1}));
+    await redisClient.set(roomKey, JSON.stringify({...config, roomId, playerCount:1, playerList:[]}));
     redisClient.expire(roomKey, ROOM_EXPIRE)
     
     console.log("createRoom: ",{...config, roomId, playerCount:1}, )
