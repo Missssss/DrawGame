@@ -39,12 +39,12 @@ const AnswerRoom = ({socket, riddle, user, room, isDrawFinish, isDrawingRef, isS
         }
     }, [])
 
-    // useEffect(() => {
-    //     if(isDrawFinish){
-    //         setChat([]);
-    //         setIsBingo(false);
-    //     }
-    // }, [isDrawFinish])
+    useEffect(() => {
+        if(isDrawFinish){
+            setChat([]);
+            setIsBingo(false);
+        }
+    }, [isDrawFinish])
     // useEffect(() => {
     //     if(isShowRank){
     //         setChat([]);
