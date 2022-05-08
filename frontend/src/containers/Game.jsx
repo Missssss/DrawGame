@@ -477,30 +477,30 @@ const Game = ({socket, user}) =>{
         }
     }
 
-    // const breakiView = () => {
-    //     const breakStyle = {
-    //         position:"absolute",
-    //         left: "250px",
-    //         top:"150px",
-    //         width:"300px",
-    //         height:"40px",
-    //         margin:"10px 10px",
-    //         bottom: "10px",
-    //         cursor: "pointer",
-    //         // backgroundColor:"palegreen",
-    //     }
-    //     if(isDrawFinish){
-    //         return(
-    //             <div style={breakStyle}>
-    //                 {bingoCountRef.current >= playerList.length - 1
-    //                     ?<div style={{margin:"5px auto"}}>太棒了! 大家都答對了</div>
-    //                     :<div style={{margin:"5px 20px"}}>謎底是: {riddle}</div>
-    //                 }
-    //                 <div style={{margin:"5px auto"}}>下回合即將開始...</div>
-    //             </div>
-    //         )
-    //     }
-    // }
+    const breakiView = () => {
+        const breakStyle = {
+            position:"absolute",
+            left: "250px",
+            top:"150px",
+            width:"300px",
+            height:"40px",
+            margin:"10px 10px",
+            bottom: "10px",
+            cursor: "pointer",
+            // backgroundColor:"palegreen",
+        }
+        if(isDrawFinish){
+            return(
+                <div style={breakStyle}>
+                    {bingoCountRef.current >= playerList.length - 1
+                        ?<div style={{margin:"5px auto"}}>太棒了! 大家都答對了</div>
+                        :<div style={{margin:"5px 20px"}}>謎底是: {riddle}</div>
+                    }
+                    <div style={{margin:"5px auto"}}>下回合即將開始...</div>
+                </div>
+            )
+        }
+    }
 
     // const rankView = () => {
     //     const rankStyle = {
