@@ -341,30 +341,30 @@ const Game = ({socket, user}) =>{
         }
     },[isMiss])
 
-    // //畫完後由drawUser emit roundFinish 進而出現break畫面
-    // useEffect(() => {
-    //     //只有drawUser 此時isDrawingRef是true
-    //     if(isDrawingRef.current){
-    //         setIsYourTurn(false);
-    //         isDrawingRef.current = false;
-    //         socket.emit("finishRound", gameInfo);
-    //     }
-    //    setIsTimesUp(false)
-    // }, [isTimesUp])
+    //畫完後由drawUser emit roundFinish 進而出現break畫面
+    useEffect(() => {
+        //只有drawUser 此時isDrawingRef是true
+        if(isDrawingRef.current){
+            setIsYourTurn(false);
+            isDrawingRef.current = false;
+            socket.emit("finishRound", gameInfo);
+        }
+       setIsTimesUp(false)
+    }, [isTimesUp])
 
-    // //breakView 10秒後 進下一round
-    // useEffect(() => {
-    //     if(isDrawFinish){
-    //         setTimeout(() => {
-    //             setIsDrawFinish(false);
-    //             //統一由drawUser通知  //TODO 萬一此user離開
-    //             if(user.userId == gameInfo.drawUser.userId){
-    //                 socket.emit("nextRound", gameInfo);
-    //                 console.log("socket.emit nextRound", gameInfo)
-    //             }
-    //         }, BREAK_DURATION * 1000)  
-    //     }
-    // },[isDrawFinish])
+    //breakView 10秒後 進下一round
+    useEffect(() => {
+        if(isDrawFinish){
+            setTimeout(() => {
+                setIsDrawFinish(false);
+                //統一由drawUser通知  //TODO 萬一此user離開
+                if(user.userId == gameInfo.drawUser.userId){
+                    socket.emit("nextRound", gameInfo);
+                    console.log("socket.emit nextRound", gameInfo)
+                }
+            }, BREAK_DURATION * 1000)  
+        }
+    },[isDrawFinish])
 
 
 
