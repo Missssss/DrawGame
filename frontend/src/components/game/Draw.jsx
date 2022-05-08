@@ -138,12 +138,12 @@ const Draw = ({socket, isDrawingRef, isDrawFinish, isShowRank, isYourTurn}) => {
         socket.emit("recordStage");
     };
 
-    // function changeColor(e){
-    //     let color = e.target.style.backgroundColor || e.target.value || "white";
-    //     ctx.current.strokeStyle = color;
-    //     console.log("changeColor", color)
-    //     socket.emit("changeColor", color)
-    // }
+    function changeColor(e){
+        let color = e.target.style.backgroundColor || e.target.value || "white";
+        ctx.current.strokeStyle = color;
+        console.log("changeColor", color)
+        socket.emit("changeColor", color)
+    }
     // function changeLineWidth(e){
     //     let lineWidth = e.target.value;
     //     ctx.current.lineWidth = lineWidth
