@@ -1,0 +1,13 @@
+node_modules/
+.env
+
+# test img
+public/data/uploads/*
+public/data/campaigns/*
+
+
+
+
+# exception to the rule
+!public/data/uploads/.gitkeep
+!public/data/campaigns/.gitkeep

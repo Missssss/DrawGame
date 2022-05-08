@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style type="text/css">
+            
+          
+        </style>
+
+        <link rel=stylesheet type="text/css" href="css/canvas.css">
+        
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+    <body>
+        
+
+        <canvas id="draw"></canvas>
+        <div class="tools">
+            <button onClick="undo()" type="button" class="button">Undo</button>
+            <button onclick="clearCanvas()" type="button" class="button">Clear</button>
+
+            <div onclick="changeColor(this.style.background)" class="color" style="background: black"></div>
+            <div onclick="changeColor(this.style.background)" class="color" style="background: blue"></div>
+            <div onclick="changeColor(this.style.background)" class="color" style="background: green"></div>
+            <div onclick="changeColor(this.style.background)" class="color" style="background: yellow"></div>
+            <div onclick="changeColor(this.style.background)" class="color" style="background: red"></div>
+
+            <input onInput="changeColor(this.value)" type="color" class="color-pocker">
+            <input onInput="changeLineWidth(this.value);" type="range" value="2" min="1" max="100" class="pen-range">
+        </div>
+        
+        <script>
+            let socket = io();
+            let canvas = document.querySelector("#draw");
+            let ctx = canvas.getContext("2d");
+            let CANVAS_STAGES = []
+            let startPointX, startPointY, endPointX, endPointY;
+            
+            canvasInit();
+            draw.addEventListener("mousedown", downHandler);
+
+            function canvasInit() {
+                let canvasWidth = window.innerWidth - 100;
+                let canvasHeight = window.innerHeight - 100;
+                canvas.setAttribute("width", canvasWidth);  // canvas.width = canvasWidth;
+                canvas.setAttribute("height", canvasHeight); // canvas.height = canvasHeight;
+
+                let DRAW_COLOR = "black"; 
+                let DRAW_WIDTH = "2";
+                ctx.strokeStyle = DRAW_COLOR;
+                ctx.lineWidth = DRAW_WIDTH;
+                ctx.lineCap = "round";
+                ctx.lineJoin = "round"
+            }
+            
+            //-------mouse事件
+            function downHandler(e){
+                // 滑鼠按下去時得到座標存在變數中作為等等畫圖的起點
+                startPointX = e.offsetX;
+                startPointY = e.offsetY;
+                
+                draw.addEventListener("mousemove", moveHandler);
+                draw.addEventListener("mouseup", stopHandler);
+                draw.addEventListener("mouseout", stopHandler);
+            };
+
+            // let ww = 0;
+            // let hh = 0;
+            function moveHandler(e) {
+                // 滑鼠在移動時我們把新的座標存下來作為終點
+                endPointX = e.offsetX;
+                endPointY = e.offsetY;
+
+                // 畫圖四步驟
+                ctx.beginPath();
+                ctx.moveTo(startPointX, startPointY);
+                ctx.lineTo(endPointX, endPointY);
+                ctx.stroke();
+                socket.emit("draw", {startPointX, startPointY, endPointX, endPointY})
+
+                // 把終點改為新的起點
+                startPointX = endPointX;
+                startPointY = endPointY;
+                
+                // let w = e.offsetX-startPointX;
+                // let h = e.offsetY-startPointY;
+                // ctx.clearRect(startPointX, startPointY, ww+1, hh+1);
+                // ctx.clearRect(startPointX, startPointY, ww-1, hh-1);
+                // ctx.clearRect(startPointX, startPointY, ww+1, hh-1);
+                // ctx.clearRect(startPointX, startPointY, ww-1, hh+1);
+                // ctx.fillRect(startPointX, startPointY, w, h)
+                // ctx.fill()
+                // ww = w;
+                // hh = h;
+
+            };
+            function stopHandler(e){
+                // 滑鼠釋放後把剛剛綁定的事件移除
+                draw.removeEventListener("mousemove", moveHandler);
+                draw.removeEventListener("mouseup", stopHandler);
+                draw.removeEventListener("mouseout", stopHandler);
+
+                //每個步驟都記錄下來
+                CANVAS_STAGES.push(ctx.getImageData(0, 0, canvas.width, canvas.height))
+                socket.emit("recordStage");
+
+            };
+
+
+             //-------
+            function changeColor(color){
+                ctx.strokeStyle = color;
+                console.log(color)
+                socket.emit("changeColor", color)
+            }
+            function changeLineWidth(lineWidth){
+                ctx.lineWidth = lineWidth
+                socket.emit("changeLineWidth", lineWidth)
+            }
+            function clearCanvas(){
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                CANVAS_STAGES = []
+                socket.emit("clearCanvas")
+                //另一清空方式
+                // ctx.fillStyle = "white";
+                // ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            function undo(){       
+                let index = CANVAS_STAGES.length - 1
+                if(index < 0){
+                    return;
+                }
+
+                if(index == 0){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height)
+                }else{
+                    CANVAS_STAGES.pop(); 
+                    ctx.putImageData(CANVAS_STAGES[index-1], 0, 0);
+                }
+                socket.emit("undo");
+            }
+
+            
+            //-------監聽事件
+            socket.on("draw", function(value){
+                console.log(value)
+                let {startPointX, startPointY, endPointX, endPointY} = value
+                ctx.beginPath();
+                ctx.moveTo(startPointX, startPointY);
+                ctx.lineTo(endPointX, endPointY);
+                ctx.stroke();
+            })
+            socket.on("recordStage", function(value){
+                CANVAS_STAGES.push(ctx.getImageData(0, 0, canvas.width, canvas.height))
+            })
+            socket.on("changeColor", function(value){
+                ctx.strokeStyle = value;
+            })
+            socket.on("changeLineWidth", function(value){
+                ctx.lineWidth = value;
+            })
+            socket.on("clearCanvas", function(value){
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                CANVAS_STAGES = [];
+            })
+            socket.on("undo", function(value){
+                let index = CANVAS_STAGES.length - 1
+                if(index < 0){
+                    return;
+                }
+
+                if(index == 0){
+                    ctx.clearRect(0, 0, canvas.width, canvas.height)
+                }else{
+                    CANVAS_STAGES.pop(); 
+                    ctx.putImageData(CANVAS_STAGES[index-1], 0, 0);
+                }
+            })
+
+
+        </script>
+        
+    </body>
+</html>
