@@ -21,9 +21,9 @@ const chatStyle = {
 
 
 const ChatRoom = ({socket, riddle, user, room}) => {
-    // const [message, setMessage] = useState({name:user.userName, text:""});
-    // const [chat, setChat] = useState([]);
-    // const chatRef = useRef(null)
+    const [message, setMessage] = useState({name:user.userName, text:""});
+    const [chat, setChat] = useState([]);
+    const chatRef = useRef(null)
 
     // useEffect(() => {
     //     socket.on("chat", (message) => {
@@ -39,9 +39,9 @@ const ChatRoom = ({socket, riddle, user, room}) => {
     // }, [])
 
 
-    // function onTextChange(e){
-    //     setMessage({name:user.userName, text: e.target.value});
-    // }
+    function onTextChange(e){
+        setMessage({name:user.userName, text: e.target.value});
+    }
 
     // function sendMessage(e) {
     //     e.preventDefault();
