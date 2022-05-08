@@ -26,18 +26,18 @@ const AnswerRoom = ({socket, riddle, user, room, isDrawFinish, isDrawingRef, isS
     const [isBingo, setIsBingo] = useState(false);
     const chatRef = useRef(null)
 
-    // useEffect(() => {
-    //     socket.on("message", (message) => {
-    //         setChat((pre) => {
-    //             return [...pre, message]
-    //         })
-    //         chatRef.current.scrollIntoView();
-    //     })
+    useEffect(() => {
+        socket.on("message", (message) => {
+            setChat((pre) => {
+                return [...pre, message]
+            })
+            chatRef.current.scrollIntoView();
+        })
 
-    //     return () => {
-    //         socket.off("message"); 
-    //     }
-    // }, [])
+        return () => {
+            socket.off("message"); 
+        }
+    }, [])
 
     // useEffect(() => {
     //     if(isDrawFinish){
