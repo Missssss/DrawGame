@@ -43,18 +43,18 @@ const ChatRoom = ({socket, riddle, user, room}) => {
         setMessage({name:user.userName, text: e.target.value});
     }
 
-    // function sendMessage(e) {
-    //     e.preventDefault();
-    //     socket.emit("chat", {message, room})
-    //     setMessage({name:user.userName, text:""})
-    // }
+    function sendMessage(e) {
+        e.preventDefault();
+        socket.emit("chat", {message, room})
+        setMessage({name:user.userName, text:""})
+    }
 
     
-    // const renderChat = () => {
-    //     return chat.map(({name, text}, index) => {
-    //         return <div key={index} style={chatStyle}>{name}: {text}</div>
-    //     })
-    // }
+    const renderChat = () => {
+        return chat.map(({name, text}, index) => {
+            return <div key={index} style={chatStyle}>{name}: {text}</div>
+        })
+    }
 
     return(
         <React.Fragment>
