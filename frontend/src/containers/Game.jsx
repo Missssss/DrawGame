@@ -415,47 +415,47 @@ const Game = ({socket, user}) =>{
         
     }
 
-    // const choiceView = () => {
-    //     const riddleFlexStyle = {
-    //         position:"absolute",
-    //         left: "130px",
-    //         top:"150px",
-    //         display: "flex",
-    //         justifyContent: "center", 
-    //         alignItems:"center",
-    //         // marginTop: "20px",
-    //     }
+    const choiceView = () => {
+        const riddleFlexStyle = {
+            position:"absolute",
+            left: "130px",
+            top:"150px",
+            display: "flex",
+            justifyContent: "center", 
+            alignItems:"center",
+            // marginTop: "20px",
+        }
 
-    //     const riddleButtonStyle = {
-    //         width:"150px",
-    //         height:"40px",
-    //         margin:"10px 10px",
-    //         boxSizing:"content-box",
-    //         bottom: "10px",
-    //         cursor: "pointer",
-    //         // backgroundColor:"palegreen",
-    //     }
-    //     let riddleList = ["窗戶","桌子","椅子","門","電腦","滑鼠"];
-    //     let randomCount = Math.round(Math.random() * 1000);
-    //     if(!isStart){
-    //         return;
-    //     }
-    //     if(!isYourTurn){
-    //         return;
-    //     }
-    //     console.log("=====================", isDrawingRef.current, riddle)
-    //     if(isDrawingRef.current){
-    //         return;
-    //     }
+        const riddleButtonStyle = {
+            width:"150px",
+            height:"40px",
+            margin:"10px 10px",
+            boxSizing:"content-box",
+            bottom: "10px",
+            cursor: "pointer",
+            // backgroundColor:"palegreen",
+        }
+        let riddleList = ["窗戶","桌子","椅子","門","電腦","滑鼠"];
+        let randomCount = Math.round(Math.random() * 1000);
+        if(!isStart){
+            return;
+        }
+        if(!isYourTurn){
+            return;
+        }
+        console.log("=====================", isDrawingRef.current, riddle)
+        if(isDrawingRef.current){
+            return;
+        }
 
-    //     return(
-    //         <div style={riddleFlexStyle}>
-    //             <button onClick={chooseRiddle} className="component_border" style={riddleButtonStyle}>{riddleList[randomCount % 6]}</button>
-    //             <button onClick={chooseRiddle} className="component_border" style={riddleButtonStyle}>{riddleList[(randomCount + 1) % 6]}</button>
-    //         </div>
-    //     )
+        return(
+            <div style={riddleFlexStyle}>
+                <button onClick={chooseRiddle} className="component_border" style={riddleButtonStyle}>{riddleList[randomCount % 6]}</button>
+                <button onClick={chooseRiddle} className="component_border" style={riddleButtonStyle}>{riddleList[(randomCount + 1) % 6]}</button>
+            </div>
+        )
        
-    // }
+    }
 
     // const missView = () => {
     //     const startButtonStyle = {
