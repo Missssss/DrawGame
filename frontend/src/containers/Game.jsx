@@ -368,52 +368,52 @@ const Game = ({socket, user}) =>{
 
 
 
-    // const waitingStartView = () => {
-    //     const startButtonStyle = {
-    //         position:"absolute",
-    //         left: "250px",
-    //         top:"150px",
-    //         width:"200px",
-    //         height:"40px",
-    //         margin:"10px 10px",
-    //         boxSizing:"content-box",
-    //         bottom: "10px",
-    //         cursor: "pointer",
-    //         // backgroundColor:"palegreen",
-    //     }
+    const waitingStartView = () => {
+        const startButtonStyle = {
+            position:"absolute",
+            left: "250px",
+            top:"150px",
+            width:"200px",
+            height:"40px",
+            margin:"10px 10px",
+            boxSizing:"content-box",
+            bottom: "10px",
+            cursor: "pointer",
+            // backgroundColor:"palegreen",
+        }
 
-    //     if(!gameInfo){
-    //         return
-    //     }
+        if(!gameInfo){
+            return
+        }
 
-    //     if(isStart){
-    //         return
-    //     }
+        if(isStart){
+            return
+        }
 
-    //     let holderId =  gameInfo.holder.userId;
-    //     let currUserId = user.userId;
+        let holderId =  gameInfo.holder.userId;
+        let currUserId = user.userId;
 
-    //     if(holderId == user.userId && playerList.length <= 1){
-    //         return(
-    //             <div style={startButtonStyle}>等待其他玩家加入...</div>
-    //         );
-    //     }
-    //     if(holderId == user.userId && playerList.length > 1){
-    //         return(
-    //             <div style={startButtonStyle}>
-    //                 <div>其他玩家等你開始...</div>
-    //                 <button onClick={goStart} style={{width:"150px", height:"40px",margin:"20px 0px"}} className="component_border">開始</button>
-    //             </div>
+        if(holderId == user.userId && playerList.length <= 1){
+            return(
+                <div style={startButtonStyle}>等待其他玩家加入...</div>
+            );
+        }
+        if(holderId == user.userId && playerList.length > 1){
+            return(
+                <div style={startButtonStyle}>
+                    <div>其他玩家等你開始...</div>
+                    <button onClick={goStart} style={{width:"150px", height:"40px",margin:"20px 0px"}} className="component_border">開始</button>
+                </div>
                 
-    //         )
-    //     }
-    //     if(holderId != user.userId){
-    //         return(
-    //             <div style={startButtonStyle}>等待房主開始...</div>
-    //         );
-    //     }
+            )
+        }
+        if(holderId != user.userId){
+            return(
+                <div style={startButtonStyle}>等待房主開始...</div>
+            );
+        }
         
-    // }
+    }
 
     // const choiceView = () => {
     //     const riddleFlexStyle = {
