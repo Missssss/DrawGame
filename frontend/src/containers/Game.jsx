@@ -294,25 +294,25 @@ const Game = ({socket, user}) =>{
         }
     },[canSocketInit])
 
-    // //控制Rank 出現20秒
-    // useEffect(() => {
-    //     if(isShowRank){
-    //         setTimeout(() => {
-    //             bingoCountRef.current = 0;
-    //             setIsShowRank(false);
-    //             setRankList([]);
-    //             setIsStart(false);
+    //控制Rank 出現20秒
+    useEffect(() => {
+        if(isShowRank){
+            setTimeout(() => {
+                bingoCountRef.current = 0;
+                setIsShowRank(false);
+                setRankList([]);
+                setIsStart(false);
 
-    //             let newRoom = {...gameInfo}
-    //             let newPlaylerList = [...gameInfo.playerList]
-    //             for(let i = 0; i < newPlaylerList.length; i++){
-    //                 newPlaylerList[i].score = 0;
-    //             }
-    //             newRoom.playerList = newPlaylerList;
-    //             setGameInfo(newRoom);
-    //         }, RANK_DURATION * 1000)  
-    //     }
-    // }, [isShowRank])
+                let newRoom = {...gameInfo}
+                let newPlaylerList = [...gameInfo.playerList]
+                for(let i = 0; i < newPlaylerList.length; i++){
+                    newPlaylerList[i].score = 0;
+                }
+                newRoom.playerList = newPlaylerList;
+                setGameInfo(newRoom);
+            }, RANK_DURATION * 1000)  
+        }
+    }, [isShowRank])
     
     //控制是否emit missRound,進而出現miss畫面
     useEffect(() => {
