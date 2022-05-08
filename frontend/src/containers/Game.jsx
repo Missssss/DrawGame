@@ -457,25 +457,25 @@ const Game = ({socket, user}) =>{
        
     }
 
-    // const missView = () => {
-    //     const startButtonStyle = {
-    //         position:"absolute",
-    //         left: "250px",
-    //         top:"150px",
-    //         width:"200px",
-    //         height:"40px",
-    //         margin:"10px 10px",
-    //         boxSizing:"content-box",
-    //         bottom: "10px",
-    //         cursor: "pointer",
-    //         // backgroundColor:"palegreen",
-    //     }
-    //     if(isMiss){
-    //         return(
-    //             <div style={startButtonStyle}>{gameInfo.drawUser.userName}錯過他的回合...</div>
-    //         )
-    //     }
-    // }
+    const missView = () => {
+        const startButtonStyle = {
+            position:"absolute",
+            left: "250px",
+            top:"150px",
+            width:"200px",
+            height:"40px",
+            margin:"10px 10px",
+            boxSizing:"content-box",
+            bottom: "10px",
+            cursor: "pointer",
+            // backgroundColor:"palegreen",
+        }
+        if(isMiss){
+            return(
+                <div style={startButtonStyle}>{gameInfo.drawUser.userName}錯過他的回合...</div>
+            )
+        }
+    }
 
     // const breakiView = () => {
     //     const breakStyle = {
