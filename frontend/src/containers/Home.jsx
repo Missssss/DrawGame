@@ -6,12 +6,12 @@ import axios from 'axios';
 const frameStyle = {
     width:"70%",
     height:"500px",
-    margin:"50px auto",
+    margin:"80px auto",
     // backgroundColor:"palegreen",
 }
 const innerBoxStyle = {
     width:"50%",
-    margin:"100px auto 10px",
+    margin:"50px auto 10px",
     // backgroundColor:"palegreen",
 }
 const divFlexStyle = {
@@ -26,7 +26,7 @@ const stick = {
     borderStyle: "solid",
     borderWidth: "0px 4px 0px 0px",
     borderColor: "black",
-    marginTop: "100px",
+    marginTop: "50px",
     boxSizing: "border-box"
 }
 const lebelStyle = {
@@ -58,7 +58,7 @@ const Home = ({setUser}) =>{
     const navigate = useNavigate();
 
     async function getUserIdAndSetUser(){
-        let resData = await axios.get("http://localhost:3000/api/1.0/user/userId");
+        let resData = await axios.get(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/user/userId`); 
         let userId = resData.data.userId  + "-" + userName;
         let user = {userId, userName, email, password};
         setUser(user);
@@ -71,7 +71,7 @@ const Home = ({setUser}) =>{
         }
         await getUserIdAndSetUser();
         try{
-            let roomData = await axios.get("http://localhost:3000/api/1.0/room/random");
+            let roomData = await axios.get(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/room/random`); 
             navigate(`/game/${roomData.data.roomId}`);
         }catch(err){
             console.log("game page: ", err.response.data);
@@ -91,7 +91,7 @@ const Home = ({setUser}) =>{
 
     return(
         <div className="frame_border" style={frameStyle}>
-            <div style={{textAlign:"center", fontSize:"40px"}}>Fun.io</div>
+            <div style={{textAlign:"center", fontSize:"40px", marginTop:"40px"}}>Fun.io</div>
 
 
             <div style={{display:"flex"}}>

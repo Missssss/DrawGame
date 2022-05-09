@@ -121,7 +121,7 @@ const Game = ({socket, user}) =>{
             //     alert("popstate")
             // })
             try{
-                let resData = await axios.get(`http://localhost:3000/api/1.0/room/${roomId}`);
+                let resData = await axios.get(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/room/${roomId}`);
                 let gameRoom = resData.data;
                 if(gameRoom.playerCount >= gameRoom.playerLimit){
                     alert("人數已滿");

@@ -59,7 +59,7 @@ const RoomList = ({socket}) =>{
     useEffect(() => {
         // 先取得全部房間
         async function getRoomList(){
-            let resData = await axios.get("http://localhost:3000/api/1.0/rooms");
+            let resData = await axios.get(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/rooms`);
             console.log("roomList: ", resData.data);
             setRoomList(resData.data);
         }
@@ -108,7 +108,7 @@ const RoomList = ({socket}) =>{
             console.log(`socket on leaveGame: `, room.roomId)
             let newRoomList = JSON.parse(JSON.stringify(roomList));
             for(let newRoom of newRoomList){
-                if(newRoom.roomId == room.roomId && newRoom.playerCount > 1){
+                if(newRoom.roomId == room.roomId && newRoom.playerCount >= 1){
                     newRoom.playerCount--;
                     break;
                 }
@@ -143,7 +143,7 @@ const RoomList = ({socket}) =>{
 
     return (
         <div style={frameStyle} className="frame_border">
-            <div style={{textAlign:"center", fontSize:"40px", margin:"20px auto 0px"}}>Rooms</div>
+            <div style={{textAlign:"center", fontSize:"40px", margin:"20px auto 0px"}}>game room</div>
             <div style={roomListStyle} className="frame_border">
                 {roomList.map((room, index) => {
                     return <Room 

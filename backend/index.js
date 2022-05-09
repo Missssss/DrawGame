@@ -188,28 +188,6 @@ app.use('/api/1.0', rateLimit, [
 ]);
 
 
-// let roomMap = {}
-// app.post('/api/1.0/', async function (req, res) {
-//     let config = req.body;
-//     let roomId = uuidv4()
-//     roomMap[roomId] = {...config, roomId}
-//     console.log(roomMap, "=======")
-      
-//     res.status(200).send({...config, roomId}) ; 
-// })
-
-// app.get('/api/1.0/roomInfo/:roomId', async function (req, res) {
-//     let roomId = req.params.roomId
-//     if(!(roomId in roomMap)){
-//         res.status(300).json({error: 'room is not exit'}); 
-//         console.log(roomId, "===aaaaaaaa===")
-//         return;
-//     }
-//     let roomInfo = roomMap[roomId]
-//     console.log(roomId in roomMap, "===bbbbbb====")
-//     console.log(roomInfo, "===bbbbbb====")
-//     res.status(200).send({roomInfo}) ; 
-// })
 
 server.listen(3000, () => {
     console.log('listening on *:3000');
