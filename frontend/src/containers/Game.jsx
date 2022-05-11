@@ -11,7 +11,7 @@ import ChatRoom from '../components/game/ChatRoom';
 
 
 const frameStyle = {
-    width:"70%",
+    width:"1000px",
     height:"600px",
     margin:"50px auto",
     // backgroundColor:"palegreen",
@@ -34,12 +34,13 @@ const ChatStyle = {
     width:"50%",
     height:"200px",
     margin:"5px",
-    overflow:"auto",
+    // overflow:"auto",
     // backgroundColor:"paleturquoise",
     boxSizing:"border-box",
+    position:"relative",
 }
 const playerListStyle = {
-    width:"30%",
+    width:"300px",
     height:"600px",
     margin:"5px",
     overflow: "auto",
@@ -66,7 +67,7 @@ const playerInfoStyle = {
     overflow:"hidden",
 }
 
-const ROUND_DURATION = 30;
+const ROUND_DURATION = 50;
 const CHOICE_DURATION = 10;
 const MISS_DURATION = 8;
 const BREAK_DURATION = 10;
@@ -205,6 +206,7 @@ const Game = ({socket, user}) =>{
         })
         socket.on("nextRound", (room) => {
             console.log("socket.on nextRound", room);
+            setRiddle(null); 
             bingoCountRef.current = 0;  //breakView後在設為0 如果在finishRoud設可能會顯示missView
             let lastPlayerList = room.playerList;
             let drawUserIndex = 0;
@@ -224,13 +226,14 @@ const Game = ({socket, user}) =>{
             }
         })
         socket.on("finishRound", (room) => {
-            setRiddle(null);
+            
             let rank = [...room.playerList];
             rank.sort(function(a, b){
                 return b.score - a.score
             })
             setRankList(rank);
             if(rank[0].score >= room.score){
+                setRiddle(null);
                 setIsShowRank(true);
                 return;
             }
@@ -437,13 +440,14 @@ const Game = ({socket, user}) =>{
         }
         let riddleList = ["窗戶","桌子","椅子","門","電腦","滑鼠"];
         let randomCount = Math.round(Math.random() * 1000);
+        console.log("=====================",isStart, isYourTurn,isDrawingRef.current, riddle)
+
         if(!isStart){
             return;
         }
         if(!isYourTurn){
             return;
         }
-        console.log("=====================", isDrawingRef.current, riddle)
         if(isDrawingRef.current){
             return;
         }
@@ -509,10 +513,10 @@ const Game = ({socket, user}) =>{
             top:"30px",
             width:"400px",
             height:"100px",
-            margin:"10px 10px",
+            margin:"10px",
         }
         const rankPlayerStyle = {
-            margin:"10px ",
+            margin:"10px 16px",
         }
         const rankImgStyle = {
             width:"150px",
@@ -593,7 +597,7 @@ const Game = ({socket, user}) =>{
                     </div>
                     <div style={divFlexStyle} >
                         <div style={ChatStyle} className="frame_border">
-                            <AnswerRoom isShowRank={isShowRank} isDrawingRef={isDrawingRef} isDrawFinish={isDrawFinish} room={gameInfo} socket={socket} user={user} riddle={riddle}/>
+                            <AnswerRoom RANK_DURATION={RANK_DURATION} BREAK_DURATION={BREAK_DURATION} isShowRank={isShowRank} isDrawingRef={isDrawingRef} isDrawFinish={isDrawFinish} room={gameInfo} socket={socket} user={user} riddle={riddle}/>
                         </div>
                         <div style={ChatStyle}  className="frame_border">
                             <ChatRoom room={gameInfo} socket={socket} user={user}/>

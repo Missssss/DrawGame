@@ -2,6 +2,9 @@ import '../index.css';
 import{BrowserRouter, Routes, Route, Link, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import {swAlert} from '../util/alert';
 
 const frameStyle = {
     width:"70%",
@@ -80,7 +83,23 @@ const Home = ({setUser}) =>{
     }
 
     async function goRoomList(){
+     
+        
+        // const MySwal = withReactContent(Swal)
+
+        // MySwal.fire({
+        // title: <p>Hello World</p>,
+        // didOpen: () => {
+        //     // `MySwal` is a subclass of `Swal` with all the same instance & static methods
+        //     MySwal.showLoading()
+        // },
+        // }).then(() => {
+        // return MySwal.fire(<p>Shorthand works too</p>)
+        // })
+        
+        
         if(userName == ""){
+            // swAlert("please enter your name");
             alert("請輸入暱稱");
             return
         }
@@ -91,7 +110,7 @@ const Home = ({setUser}) =>{
 
     return(
         <div className="frame_border" style={frameStyle}>
-            <div style={{textAlign:"center", fontSize:"40px", marginTop:"40px"}}>Fun.io</div>
+            <div style={{textAlign:"center", fontSize:"50px", marginTop:"40px"}}>F u n . i o</div>
 
 
             <div style={{display:"flex"}}>

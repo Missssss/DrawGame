@@ -11,6 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 } */
+@import url('https://fonts.googleapis.com/css2?family=Macondo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Indie+Flower&family=Macondo&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet');
+@import url('https://fonts.googleapis.com/css2?family=Rancho&display=swap');
+
 
 @import url(https://fonts.googleapis.com/earlyaccess/cwtexyen.css);
 html, body, div, span, applet, object, iframe,
@@ -32,6 +37,7 @@ time, mark, audio, video, button, input {
 	font-size: 100%; */
 	/* font: inherit; */
   font-family: 'cwTeXYen', sans-serif;
+  /* font-family: 'Indie Flower','Rancho', 'Macondo', 'cwTeXYen', cursive; */
 	vertical-align: baseline;
   font-size:20px ;
 }

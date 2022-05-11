@@ -44,7 +44,7 @@ const Create = ({setRoomInfo, socket}) =>{
     const [mode, setMode] = useState("general");
     const [theme, setTheme] = useState("general");
     const [playerLimit, setPlayerLimit] = useState(5);
-    const [score, setScore] = useState(50);
+    const [score, setScore] = useState(20);
 
     const navigate = useNavigate();
     async function createRoom(){

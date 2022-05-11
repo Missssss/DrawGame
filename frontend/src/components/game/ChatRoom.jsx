@@ -6,6 +6,21 @@ const chatFrameStayle = {
     height:"75%",
     margin:"5px auto 2px",
     overflow:"auto",
+    position:"relative",
+}
+
+const chatBannerStyle = {
+    width:"130px",
+    height:"40px",
+    backgroundColor:"white",
+    top: "-25px",
+    right:"30px",
+    zIndex:"1",
+    position:"absolute",
+    textAlign:"center",
+    verticalAlign:"center",
+    lineHeight:"40px",
+    fontSize:"20px" ,
 }
 
 const chatInputStayle = {
@@ -58,6 +73,7 @@ const ChatRoom = ({socket, riddle, user, room}) => {
 
     return(
         <React.Fragment>
+            <div style={chatBannerStyle} className="frame_border">chat room</div>
             <div  style={chatFrameStayle}>
                 {renderChat()}
                 <div ref={chatRef}></div>
