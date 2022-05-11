@@ -8,6 +8,7 @@ import Draw from '../components/game/Draw';
 import Timer from '../components/game/Timer';
 import AnswerRoom from '../components/game/AnswerRoom';
 import ChatRoom from '../components/game/ChatRoom';
+import { swAlert, enterName } from '../util/alert';
 
 
 const frameStyle = {
@@ -74,7 +75,7 @@ const BREAK_DURATION = 10;
 const RANK_DURATION = 20;
 const BONUS = 3
 
-const Game = ({socket, user}) =>{
+const Game = ({socket, user, setTmpRoomId}) =>{
     // const [socket, setSocket] = useState(null);
     const [canSocketInit, setCanSocketInit] = useState(false)
     const [playerList, setPlayerList] = useState([]);
@@ -103,10 +104,11 @@ const Game = ({socket, user}) =>{
     // console.log("playerList:", playerList);
     useEffect(() => {
         async function gameInit(){
-            // if(!user.userId){
-            //     alert("請設定暱稱")
-            //     navigate("/")
-            // }
+            if(!user.userId || ""){
+                setTmpRoomId(roomId);
+                swAlert("please enter your name");
+                navigate("/");
+            }
 
             // window.onbeforeunload =  function (e) {
             //     console.log("bbbbbb")

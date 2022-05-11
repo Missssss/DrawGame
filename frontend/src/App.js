@@ -11,6 +11,7 @@ function App() {
   const [socket, setSocket] = useState(io(process.env.REACT_APP_SOCKETIO_URL));
   const [user, setUser] = useState({})
   const [roomInfo, setRoomInfo] = useState({}); //{roomId, theme, playerCount, score}
+  const [tmpRoomId, setTmpRoomId] = useState(null);
 
   useEffect(() => {
     console.log("app roomInfo: ", roomInfo);
@@ -23,10 +24,10 @@ function App() {
       {/* <Link to="/">    home</Link>
       <Link to="/Rooms">    abc</Link> */}
       <Routes>
-        <Route path="/" element={<Home setUser={setUser} />}/>
+        <Route path="/" element={<Home setUser={setUser} tmpRoomId={tmpRoomId} setTmpRoomId={setTmpRoomId}/>}/>
         <Route path="/rooms" element={<RoomList socket={socket}/>} />
         <Route path="/create" element={<Create socket={socket} setRoomInfo={setRoomInfo}/>} />
-        <Route path="/game/:roomId" element={<Game socket={socket} roomInfo={roomInfo} user={user}/>} />
+        <Route path="/game/:roomId" element={<Game socket={socket} roomInfo={roomInfo} user={user} setTmpRoomId={setTmpRoomId}/>} />
       </Routes>
     </BrowserRouter>
   );

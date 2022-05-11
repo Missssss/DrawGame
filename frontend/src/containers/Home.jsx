@@ -4,7 +4,7 @@ import {useState, useEffect} from 'react';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
-import {swAlert} from '../util/alert';
+import { swAlert } from '../util/alert';
 
 const frameStyle = {
     width:"70%",
@@ -54,7 +54,7 @@ const buttonStyle = {
     // backgroundColor:"palegreen",
 }
 
-const Home = ({setUser}) =>{
+const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -69,41 +69,39 @@ const Home = ({setUser}) =>{
 
     async function joinGame(){
         if(userName == ""){
-            alert("請輸入暱稱");
+            swAlert("please enter your name");
             return
         }
         await getUserIdAndSetUser();
+
+        if(tmpRoomId){
+            navigate(`/game/${tmpRoomId}`);
+            setTmpRoomId(null);
+            return
+        }
+
         try{
             let roomData = await axios.get(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/room/random`); 
             navigate(`/game/${roomData.data.roomId}`);
         }catch(err){
             console.log("game page: ", err.response.data);
-            alert("房間已滿， \r\n請稍等一下或建立新房間。")
+            swAlert("not empty room, \r\n you can create a game room");
+            // alert("房間已滿， \r\n請稍等一下或建立新房間。")
         }
     }
 
     async function goRoomList(){
-     
-        
-        // const MySwal = withReactContent(Swal)
-
-        // MySwal.fire({
-        // title: <p>Hello World</p>,
-        // didOpen: () => {
-        //     // `MySwal` is a subclass of `Swal` with all the same instance & static methods
-        //     MySwal.showLoading()
-        // },
-        // }).then(() => {
-        // return MySwal.fire(<p>Shorthand works too</p>)
-        // })
-        
-        
         if(userName == ""){
-            // swAlert("please enter your name");
-            alert("請輸入暱稱");
+            swAlert("please enter your name");
+            // alert("請輸入暱稱");
             return
         }
         await getUserIdAndSetUser();
+        if(tmpRoomId){
+            navigate(`/game/${tmpRoomId}`);
+            setTmpRoomId(null);
+            return
+        }
         navigate(`/rooms`);
     }
     
