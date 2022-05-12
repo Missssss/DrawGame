@@ -2,16 +2,19 @@ import '../index.css';
 import{BrowserRouter, Routes, Route, Link, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import axios from 'axios';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
+import { swAlert } from '../util/alert';
 
 const frameStyle = {
     width:"70%",
     height:"500px",
-    margin:"50px auto",
+    margin:"80px auto",
     // backgroundColor:"palegreen",
 }
 const innerBoxStyle = {
     width:"50%",
-    margin:"100px auto 10px",
+    margin:"50px auto 10px",
     // backgroundColor:"palegreen",
 }
 const divFlexStyle = {
@@ -26,7 +29,7 @@ const stick = {
     borderStyle: "solid",
     borderWidth: "0px 4px 0px 0px",
     borderColor: "black",
-    marginTop: "100px",
+    marginTop: "50px",
     boxSizing: "border-box"
 }
 const lebelStyle = {
@@ -51,14 +54,14 @@ const buttonStyle = {
     // backgroundColor:"palegreen",
 }
 
-const Home = ({setUser}) =>{
+const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
     async function getUserIdAndSetUser(){
-        let resData = await axios.get("http://localhost:3000/api/1.0/user/userId");
+        let resData = await axios.get(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/user/userId`); 
         let userId = resData.data.userId  + "-" + userName;
         let user = {userId, userName, email, password};
         setUser(user);
@@ -66,32 +69,46 @@ const Home = ({setUser}) =>{
 
     async function joinGame(){
         if(userName == ""){
-            alert("請輸入暱稱");
+            swAlert("please enter your name");
             return
         }
         await getUserIdAndSetUser();
+
+        if(tmpRoomId){
+            navigate(`/game/${tmpRoomId}`);
+            setTmpRoomId(null);
+            return
+        }
+
         try{
-            let roomData = await axios.get("http://localhost:3000/api/1.0/room/random");
+            let roomData = await axios.get(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/room/random`); 
             navigate(`/game/${roomData.data.roomId}`);
         }catch(err){
             console.log("game page: ", err.response.data);
-            alert("房間已滿， \r\n請稍等一下或建立新房間。")
+            swAlert("not empty room, \r\n you can create a game room");
+            // alert("房間已滿， \r\n請稍等一下或建立新房間。")
         }
     }
 
     async function goRoomList(){
         if(userName == ""){
-            alert("請輸入暱稱");
+            swAlert("please enter your name");
+            // alert("請輸入暱稱");
             return
         }
         await getUserIdAndSetUser();
+        if(tmpRoomId){
+            navigate(`/game/${tmpRoomId}`);
+            setTmpRoomId(null);
+            return
+        }
         navigate(`/rooms`);
     }
     
 
     return(
         <div className="frame_border" style={frameStyle}>
-            <div style={{textAlign:"center", fontSize:"40px"}}>Fun.io</div>
+            <div style={{textAlign:"center", fontSize:"50px", marginTop:"40px"}}>F u n . i o</div>
 
 
             <div style={{display:"flex"}}>

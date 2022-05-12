@@ -1,28 +1,5 @@
-# backend
-
-node_modules/
-.env
-.env.production
-logs
-*.log
-
-
-# test img
-public/data/uploads/*
-public/data/campaigns/*
-
-
-# exception to the rule
-!public/data/uploads/.gitkeep
-!public/data/campaigns/.gitkeep
-
-
-# ======================================================
-
-
-# frontend
-
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
 # dependencies
 /node_modules
 /.pnp

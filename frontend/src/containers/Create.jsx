@@ -1,7 +1,6 @@
 import '../index.css';
 import{BrowserRouter, Routes, Route, Link, useNavigate} from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-import io from 'socket.io-client';
 import axios from 'axios';
 
 
@@ -19,7 +18,7 @@ const divFlexStyle = {
     // marginTop: "20px",
 }
 const lebelStyle = {
-    width:"20%",
+    width:"15%",
     textAlign:"center"
 }
 const inputStyle = {
@@ -41,17 +40,15 @@ const buttonStyle = {
     // backgroundColor:"palegreen",
 }
 
-const socket = io(process.env.REACT_APP_SOCKETIO_URL);
-
-const Create = ({setRoomInfo}) =>{
+const Create = ({setRoomInfo, socket}) =>{
     const [mode, setMode] = useState("general");
     const [theme, setTheme] = useState("general");
     const [playerLimit, setPlayerLimit] = useState(5);
-    const [score, setScore] = useState(50);
+    const [score, setScore] = useState(20);
 
     const navigate = useNavigate();
     async function createRoom(){
-        let resData = await axios.post("http://localhost:3000/api/1.0/room", {mode, theme, playerLimit, score})
+        let resData = await axios.post(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/room`, {mode, theme, playerLimit, score})
         let roomInfo = resData.data; 
         setRoomInfo(roomInfo);
 

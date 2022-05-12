@@ -86,7 +86,7 @@ io.on('connection', (socket) => {
         socket.join(`roomChat--${room.roomId}`);
 
         //通知roomLsit某room人數更新
-        let ids = await io.in(`roomAnswer--${room.roomId}`).allSockets()
+        let ids = await io.in(`roomAnswer--${room.roomId}`).allSockets();
         let playerCount = ids.size;
         room.playerCount = playerCount;
         io.emit("joinGame", room);
@@ -116,15 +116,28 @@ io.on('connection', (socket) => {
     });
 
     socket.on("leaveGame", async(room) => {
+        for(roomName of socket.rooms){
+            if(roomName.startsWith("roomAnswer--") || roomName.startsWith("roomChat--")){
+                socket.leave(roomName);
+            }
+        }
+        let ids = await io.in(`roomAnswer--${room.roomId}`).allSockets();
+        room.playerCount = ids.size;
         socket.to(`roomAnswer--${room.roomId}`).emit("playerLeave", room); //通知game有人離開
         io.emit("leaveGame", room) //通知roomLsit某room人數減少
         decrRoomPlayer(room) //減少redis裡此room的playerCount
         console.log('a user leave game');
     })
 
+    socket.on("roomFree", (room) => {
+        //通知roomList room.isStart false
+        io.emit("roomFree", room);
+    })
     socket.on("gameStart", (room) => {
         io.to(`roomAnswer--${room.roomId}`).emit("gameStart", room);
         setRoomInfo(room);
+        //通知roomList room.isStart start
+        io.emit("roomStart", room);
     })
     socket.on("gameRiddle", (room) => {
         io.to(`roomAnswer--${room.roomId}`).emit("gameRiddle", room);
@@ -188,28 +201,6 @@ app.use('/api/1.0', rateLimit, [
 ]);
 
 
-// let roomMap = {}
-// app.post('/api/1.0/', async function (req, res) {
-//     let config = req.body;
-//     let roomId = uuidv4()
-//     roomMap[roomId] = {...config, roomId}
-//     console.log(roomMap, "=======")
-      
-//     res.status(200).send({...config, roomId}) ; 
-// })
-
-// app.get('/api/1.0/roomInfo/:roomId', async function (req, res) {
-//     let roomId = req.params.roomId
-//     if(!(roomId in roomMap)){
-//         res.status(300).json({error: 'room is not exit'}); 
-//         console.log(roomId, "===aaaaaaaa===")
-//         return;
-//     }
-//     let roomInfo = roomMap[roomId]
-//     console.log(roomId in roomMap, "===bbbbbb====")
-//     console.log(roomInfo, "===bbbbbb====")
-//     res.status(200).send({roomInfo}) ; 
-// })
 
 server.listen(3000, () => {
     console.log('listening on *:3000');
