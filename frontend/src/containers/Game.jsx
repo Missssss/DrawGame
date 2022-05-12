@@ -94,8 +94,7 @@ const Game = ({socket, user, setTmpRoomId}) =>{
     const [isShowRank, setIsShowRank] = useState(false);
     const [rankList, setRankList] = useState([]);
     const isDrawingRef = useRef(false);  //只有drawUser會true
-    const bingoCountRef = useRef(0)
-
+    const bingoCountRef = useRef(0);
 
     const {roomId}  = useParams();
     const navigate = useNavigate();
@@ -110,19 +109,6 @@ const Game = ({socket, user, setTmpRoomId}) =>{
                 navigate("/");
             }
 
-            // window.onbeforeunload =  function (e) {
-            //     console.log("bbbbbb")
-            //     alert("bbbbbb")
-            // };
-
-            // window.addEventListener("visibilityState", function(){
-            //     console.log("eeeeeee")
-            //     alert("eeeeeee")
-            // })
-            // window.addEventListener("popstate", function(){
-            //     console.log("popstate")
-            //     alert("popstate")
-            // })
             try{
                 let resData = await axios.get(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/room/${roomId}`);
                 let gameRoom = resData.data;
@@ -176,7 +162,6 @@ const Game = ({socket, user, setTmpRoomId}) =>{
         // TODO emit 來的room不是完整的  //玩家離開後holder drawer的影響
         socket.on("playerLeave", (room) => {
             console.log("plyerLeave1",room);
-
             setPlayerList((pre) => {
                 console.log("plyerLeave2",pre);
                 let newPlayerList = JSON.parse(JSON.stringify(pre));
@@ -184,6 +169,17 @@ const Game = ({socket, user, setTmpRoomId}) =>{
                 gameInfo.playerList = newPlayerList;
                 gameInfo.playerCount = newPlayerList.length;
                 setGameInfo({...gameInfo});
+
+                // if(room.currUserId == gameInfo.drawUser.userId){
+                //     if(!isMiss || !isDrawFinish || !isShowRank){
+                //         if(newPlayerList[0].userId == user.userId){
+                //             socket.emit("nextRound", room)
+                //         }
+                //     }else{
+                //         tmpEmiterRef.current = newPlayerList[0];
+                //         tmpEmitRoomRef.current = room;
+                //     }
+                // }
                 return newPlayerList;
             });
         })
@@ -236,6 +232,7 @@ const Game = ({socket, user, setTmpRoomId}) =>{
             setRankList(rank);
             if(rank[0].score >= room.score){
                 setRiddle(null);
+                setDuration(RANK_DURATION);
                 setIsShowRank(true);
                 return;
             }
@@ -285,7 +282,6 @@ const Game = ({socket, user, setTmpRoomId}) =>{
         socket.emit("joinGame", gameInfo); //發送給roomlist
         console.log("socket emit joinGame:",gameInfo)
 
-
         return () => {
             socket.off("playerJoin");
             socket.off("plyerLeave");
@@ -295,9 +291,34 @@ const Game = ({socket, user, setTmpRoomId}) =>{
             socket.off("nextRound");
             socket.off("finishRound");
             socket.off("bingo");
-            socket.emit("leaveGame", gameInfo); //按上一頁會觸發(因為按上一頁socket不會斷)
+            socket.emit("leaveGame", gameInfo); //按上一頁會觸發(因為按上一頁socket不會斷) //似乎會emit的gameInfo不是最新狀態
         }
     },[canSocketInit])
+
+    useEffect(() => {
+        if(playerList[0]){
+            setGameInfo( pre => {
+                pre.holder = playerList[0];
+                return pre
+            })
+        }
+        if(playerList.length <= 1){
+            setIsStart(false);
+            socket.emit("roomFree",{...gameInfo, isStart:false});
+            console.log("roomFreeroomFreeroomFree",{...gameInfo})
+            console.log("roomFreeroomFreeroomFree",{...gameInfo, isStart:false})
+        }
+    },[playerList])
+
+    useEffect(() => {
+        if(!gameInfo){
+            return;
+        }
+        //統一由holder發送
+        if(!isStart && user.userId == gameInfo.holder.userId){
+            socket.emit("roomFree",{...gameInfo, isStart:false});
+        }
+    },[isStart])
 
     //控制Rank 出現20秒
     useEffect(() => {
@@ -370,7 +391,6 @@ const Game = ({socket, user, setTmpRoomId}) =>{
             }, BREAK_DURATION * 1000)  
         }
     },[isDrawFinish])
-
 
 
     const waitingStartView = () => {

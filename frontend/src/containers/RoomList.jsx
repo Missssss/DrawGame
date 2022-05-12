@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import Room from '../components/roomList/Room';
+import { swAlert, enterName } from '../util/alert';
 
 const frameStyle = {
     width:"70%",
@@ -71,8 +72,7 @@ const RoomList = ({socket}) =>{
         socket.on("createRoom", (room) => {
             console.log(`socket on createRoom: `, room.roomId)
             
-            //這樣不行?? //底下[]有放roomList就行了
-            // setRoomList([...roomList, room]);
+            // setRoomList([...roomList, room]);//底下[]有放roomList就行了,似乎是這樣才能抓到最新狀態
             setRoomList((pre) => {
                 return [...pre, room]
             })
@@ -109,17 +109,43 @@ const RoomList = ({socket}) =>{
             let newRoomList = JSON.parse(JSON.stringify(roomList));
             for(let newRoom of newRoomList){
                 if(newRoom.roomId == room.roomId && newRoom.playerCount >= 1){
-                    newRoom.playerCount--;
+                    newRoom.playerCount = room.playerCount;
                     break;
                 }
             }
-            setRoomList(newRoomList)
+            setRoomList(newRoomList);
+        })
+
+        socket.on("roomStart", (room) => {
+            let newRoomList = JSON.parse(JSON.stringify(roomList));
+            for(let newRoom of newRoomList){
+                if(newRoom.roomId == room.roomId){
+                    newRoom.isStart = true;
+                    break;
+                }
+            }
+            setRoomList(newRoomList);
+        })
+
+        socket.on("roomFree", (room) => {
+            console.log(" socket.on roomFree",room)
+            let newRoomList = JSON.parse(JSON.stringify(roomList));
+            for(let newRoom of newRoomList){
+                if(newRoom.roomId == room.roomId){
+                    newRoom.isStart = false;
+                    break;
+                }
+            }
+            setRoomList(newRoomList);
+            
         })
 
         return () => {
             socket.off("createRoom");
             socket.off("joinGame");
             socket.off("leaveGame");
+            socket.off("roomStart");
+            socket.off("roomFree");
         }
     },[roomList])
 
@@ -128,13 +154,18 @@ const RoomList = ({socket}) =>{
             return room.roomId == currentRoomId;
         })
 
+        if(gameRoom.isStart){
+            swAlert("game has started");
+            return;
+        }
+
         if(!gameRoom){
-            alert("此房間已不在");
+            swAlert("room has expired");
             return;
         }
 
         if(gameRoom.playerCount >= gameRoom.playerLimit ){
-            alert("人數已滿");
+            swAlert("room is full");
             return;
         }
 
