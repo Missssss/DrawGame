@@ -36,8 +36,8 @@ time, mark, audio, video, button, input {
 	border: 0;
 	font-size: 100%; */
 	/* font: inherit; */
-  font-family: 'cwTeXYen', sans-serif;
-  /* font-family: 'Indie Flower','Rancho', 'Macondo', 'cwTeXYen', cursive; */
+  /* font-family: 'cwTeXYen', sans-serif; */
+  font-family: 'Indie Flower','Rancho', 'Macondo', 'cwTeXYen', cursive;
 	vertical-align: baseline;
   font-size:20px ;
 }

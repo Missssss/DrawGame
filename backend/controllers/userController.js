@@ -14,7 +14,7 @@ const getUserId =  async (req, res) => {
 const signUp = async (req, res) => {
     let {name} = req.body;
     const {email, password} = req.body;
-
+    
     if(!name || !email || !password) {
         res.status(400).send({error:'Request Error: name, email and password are required.'});
         return;
