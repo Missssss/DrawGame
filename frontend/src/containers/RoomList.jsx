@@ -7,7 +7,7 @@ import Room from '../components/roomList/Room';
 import { swAlert, enterName } from '../util/alert';
 
 const frameStyle = {
-    width:"70%",
+    width:"65%",
     height:"500px",
     margin:"100px auto",
     position: "relative",

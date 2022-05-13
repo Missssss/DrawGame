@@ -21,6 +21,7 @@ const chatBannerStyle = {
     verticalAlign:"center",
     lineHeight:"40px",
     fontSize:"20px" ,
+    fontWeight:"600",
 }
 
 const chatInputStayle = {
@@ -73,7 +74,7 @@ const ChatRoom = ({socket, riddle, user, room}) => {
 
     return(
         <React.Fragment>
-            <div style={chatBannerStyle} className="frame_border">chat room</div>
+            <div style={chatBannerStyle} className="frame_border">CHAT ROOM</div>
             <div  style={chatFrameStayle}>
                 {renderChat()}
                 <div ref={chatRef}></div>

@@ -7,7 +7,7 @@ import withReactContent from 'sweetalert2-react-content';
 import { swAlert } from '../util/alert';
 
 const frameStyle = {
-    width:"70%",
+    width:"65%",
     height:"500px",
     margin:"80px auto",
     // backgroundColor:"palegreen",
@@ -37,7 +37,7 @@ const lebelStyle = {
     textAlign:"center"
 }
 const inputStyle = {
-    width:"200px",
+    width:"190px",
     height:"40px",
     margin:"10px 10px",
     fontSize:"20px",
@@ -45,7 +45,7 @@ const inputStyle = {
     // backgroundColor:"palegreen",
 }
 const buttonStyle = {
-    width:"150px",
+    width:"140px",
     height:"40px",
     margin:"10px 10px",
     boxSizing:"content-box",
@@ -109,7 +109,7 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
     async function signUp(){
         let name = userName;
         if(!name || !email || !password){
-            swAlert("name, email and password are require");
+            swAlert("name, email and password are required");
             return
         }
         if(!regex.test(email)) {
@@ -134,7 +134,7 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
     }
     async function signIn(){
         if(!email || !password){
-            swAlert("email and password are require");
+            swAlert("email and password are required");
             return
         }
         if(!regex.test(email)) {
@@ -168,15 +168,15 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
                         <img src="https://avatars.dicebear.com/api/male/john.svg?mood[]=happy&mood[]=sad" style={{width:"100px", height:"100px", margin:"20px"}}></img>
                     </div>
                     <div style={divFlexStyle}>
-                        <label>暱稱 </label>
-                        <input className="component_border" maxlength="20" type="text" style={inputStyle} onChange={(e)=>setUserName(e.target.value)} />
+                        <label>nickname </label>
+                        <input className="component_border" maxLength="20" type="text" style={inputStyle} onChange={(e)=>setUserName(e.target.value)}  placeHolder="enter nickname"/>
                     </div>
                     <div style={divFlexStyle}>
                         {/* <Link to="/rooms"> */}
-                            <button  className="component_border" style={buttonStyle} onClick={goRoomList}>房間</button>
+                            <button  className="component_border" style={buttonStyle} onClick={goRoomList}>GAME ROOM</button>
                         {/* </Link> */}
                         {/* <Link to="/game"> */}
-                            <button  className="component_border" style={buttonStyle} onClick={joinGame} >快速加入</button>
+                            <button  className="component_border" style={buttonStyle} onClick={joinGame} >PLAY</button>
                         {/* </Link> */}
                     </div>                    
                 </div>
@@ -185,22 +185,22 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
 
                 <div style={innerBoxStyle}>
                     <div style={divFlexStyle} >
-                        <input  className="component_border" maxLength="30" type="email" style={inputStyle}/>
+                        <input  className="component_border" maxLength="30" type="email" style={inputStyle} placeHolder="enter name"/>
                     </div> 
                     <div style={divFlexStyle} >
                         <label style={lebelStyle}>e-mail </label>
-                        <input  className="component_border" maxLength="30" type="email" style={inputStyle} onChange={(e)=>setEmail(e.target.value)} />
+                        <input  className="component_border" maxLength="30" type="email" style={inputStyle} onChange={(e)=>setEmail(e.target.value)} placeHolder="enter email" />
                     </div>
                     <div style={divFlexStyle} >
                         <label style={lebelStyle} >password </label>
-                        <input  className="component_border" maxLength="30" type="password" style={inputStyle} onChange={(e)=>setPassword(e.target.value)} />
+                        <input  className="component_border" maxLength="30" type="password" style={inputStyle} onChange={(e)=>setPassword(e.target.value)} placeHolder="enter password" />
                     </div> 
                     <div style={divFlexStyle}>
                         {/* <Link to="/rooms"> */}
-                            <button onClick={signIn} className="component_border" style={buttonStyle}>sign in</button>
+                            <button onClick={signIn} className="component_border" style={buttonStyle}>SIGN IN</button>
                         {/* </Link> */}
                         {/* <Link to="/rooms"> */}
-                            <button onClick={signUp} className="component_border" style={buttonStyle}>sign up</button>
+                            <button onClick={signUp} className="component_border" style={buttonStyle}>SIGN UP</button>
                         {/* </Link> */}
                     </div>
                 </div>
