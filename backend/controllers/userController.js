@@ -107,9 +107,21 @@ const nativeSignIn = async (email, password) => {
     }
 };
 
+const getUserProfile = async (req, res) => {
+    res.status(200).send({
+        data: {
+            provider: req.user.provider,
+            name: req.user.name,
+            email: req.user.email,
+            picture: req.user.picture
+        }
+    });
+    return;
+};
 
 module.exports = {
     getUserId,
     signUp,
     signIn,
+    getUserProfile,
 };

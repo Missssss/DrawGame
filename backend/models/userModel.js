@@ -7,6 +7,7 @@ const {TOKEN_EXPIRE, TOKEN_SECRET} = process.env; // 30 days by seconds
 const jwt = require('jsonwebtoken');
 
 const USER_ROLE = {
+    ALL: -1,
     ADMIN: 1,
     USER: 2
 };
@@ -36,7 +37,7 @@ const signUp = async (name, roleId, email, password) => {
             name: user.name,
             email: user.email,
             picture: user.picture
-        }, TOKEN_SECRET, { expiresIn: TOKEN_EXPIRE});
+        }, TOKEN_SECRET);
         user.access_token = accessToken;
 
         const queryStr = 'INSERT INTO user SET ?';
@@ -72,7 +73,7 @@ const nativeSignIn = async (email, password) => {
             name: user.name,
             email: user.email,
             picture: user.picture
-        }, TOKEN_SECRET, { expiresIn: TOKEN_EXPIRE});
+        }, TOKEN_SECRET);
 
         const queryStr = 'UPDATE user SET access_token = ?, access_expired = ? WHERE id = ?';
         await conn.query(queryStr, [accessToken, TOKEN_EXPIRE, user.id]);
@@ -92,9 +93,24 @@ const nativeSignIn = async (email, password) => {
     }
 };
 
+const getUserDetail = async (email, roleId) => {
+    try {
+        if (roleId) {
+            const [users] = await pool.query('SELECT * FROM user WHERE email = ? AND role_id = ?', [email, roleId]);
+            return users[0];
+        } else {
+            const [users] = await pool.query('SELECT * FROM user WHERE email = ?', [email]);
+            return users[0];
+        }
+    } catch (e) {
+        return null;
+    }
+};
+
 
 module.exports = {
     USER_ROLE,
     signUp,
-    nativeSignIn
+    nativeSignIn,
+    getUserDetail
 };
