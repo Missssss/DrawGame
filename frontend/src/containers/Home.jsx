@@ -104,8 +104,11 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
         }
         navigate(`/rooms`);
     }
-    
 
+    async function signUp(){
+
+    }
+    
     return(
         <div className="frame_border" style={frameStyle}>
             <div style={{textAlign:"center", fontSize:"50px", marginTop:"40px"}}>F u n . i o</div>
@@ -146,10 +149,10 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
                     </div> 
                     <div style={divFlexStyle}>
                         <Link to="/rooms">
-                            <button className="component_border" style={buttonStyle}>sign in</button>
+                            <button onClick={signUp} className="component_border" style={buttonStyle}>sign in</button>
                         </Link>
                         <Link to="/rooms">
-                            <button className="component_border" style={buttonStyle}>sign up</button>
+                            <button onClick={signUp} className="component_border" style={buttonStyle}>sign up</button>
                         </Link>
                     </div>
                 </div>

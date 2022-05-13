@@ -25,7 +25,7 @@ async function  enterName(){
       })
       
       if (name) {
-        // Swal.fire(`Your IP address is ${name}`);
+        // Swal.fire(`Your name is ${name}`);
         return name;
       }
 }

@@ -10,7 +10,6 @@ import AnswerRoom from '../components/game/AnswerRoom';
 import ChatRoom from '../components/game/ChatRoom';
 import { swAlert, enterName } from '../util/alert';
 
-
 const frameStyle = {
     width:"1000px",
     height:"600px",
