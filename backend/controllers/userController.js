@@ -55,8 +55,61 @@ const signUp = async (req, res) => {
     });
 };
 
+const signIn = async (req, res) => {
+    const data = req.body;
+
+    let result;
+    switch (data.provider) {
+        case 'native':
+            result = await nativeSignIn(data.email, data.password);
+            break;
+        default:
+            result = {error: 'Wrong Request'};
+    }
+
+    if (result.error) {
+        const status_code = result.status ? result.status : 403;
+        res.status(status_code).send({error: result.error});
+        return;
+    }
+
+    const user = result.user;
+    if (!user) {
+        res.status(500).send({error: 'Database Query Error'});
+        return;
+    }
+
+    res.status(200).send({
+        data: {
+            access_token: user.access_token,
+            access_expired: user.access_expired,
+            login_at: user.login_at,
+            user: {
+                id: user.id,
+                provider: user.provider,
+                name: user.name,
+                email: user.email,
+                picture: user.picture
+            }
+        }
+    });
+};
+
+const nativeSignIn = async (email, password) => {
+    if(!email || !password){
+        return {error: 'Request Error: email and password are required.', status: 400};
+    }
+
+    try {
+        return await User.nativeSignIn(email, password);
+    } catch (error) {
+        return {error};
+    }
+};
+
 
 module.exports = {
     getUserId,
     signUp,
+    signIn,
 };
