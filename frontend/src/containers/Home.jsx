@@ -132,30 +132,30 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
         }
     
     }
-    // async function signIn(){
-    //     if(!email || !password){
-    //         swAlert("email and password are require");
-    //         return
-    //     }
-    //     if(!regex.test(email)) {
-    //         swAlert("invalid email");
-    //         return
-    //     }
+    async function signIn(){
+        if(!email || !password){
+            swAlert("email and password are require");
+            return
+        }
+        if(!regex.test(email)) {
+            swAlert("invalid email");
+            return
+        }
 
-    //     try{
-    //         let data = {provider:"native", email, password}
-    //         let resData = await axios.post(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/user/signIn`, data);
-    //         resData = resData.data.data;
-    //         let access_token = resData.access_token;
-    //         window.localStorage.setItem("access_token", access_token);
-    //         let user = {userId: resData.user.id, userName: resData.user.name, email, password};
-    //         setUser(user);
-    //         navigate(`/rooms/`);
-    //     }catch(err){
-    //         console.log("home page: ", err.response.data);
-    //         swAlert("signin fail");
-    //     }
-    // }
+        try{
+            let data = {provider:"native", email, password}
+            let resData = await axios.post(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/user/signIn`, data);
+            resData = resData.data.data;
+            let access_token = resData.access_token;
+            window.localStorage.setItem("access_token", access_token);
+            let user = {userId: resData.user.id, userName: resData.user.name, email, password};
+            setUser(user);
+            navigate(`/rooms/`);
+        }catch(err){
+            console.log("home page: ", err.response.data);
+            swAlert("signin fail");
+        }
+    }
     
     return(
         <div className="frame_border" style={frameStyle}>
