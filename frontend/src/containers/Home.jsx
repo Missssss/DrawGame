@@ -2,14 +2,13 @@ import '../index.css';
 import{BrowserRouter, Routes, Route, Link, useNavigate} from 'react-router-dom';
 import {useState, useEffect} from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
-import { swAlert } from '../util/alert';
+import { swAlert, getAvatarList, enterName } from '../util/alert';
+import { ReactComponent as PanSvg } from '../img/draw.svg';
 
 const frameStyle = {
     width:"65%",
     height:"500px",
-    margin:"80px auto",
+    margin:"100px auto",
     // backgroundColor:"palegreen",
 }
 const innerBoxStyle = {
@@ -51,26 +50,44 @@ const buttonStyle = {
     boxSizing:"content-box",
     bottom: "10px",
     cursor: "pointer",
+    fontWeight:"600"
     // backgroundColor:"palegreen",
 }
 const regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+const colors = ["black","red","blue","green","yellow","purple"];
 
 const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
-    const [userName, setUserName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const navigate = useNavigate();
+    const [userName, setUserName] = useState();
+    const [email, setEmail] = useState();
+    const [password, setPassword] = useState();
+    const [avatar, setAvatar] = useState("happy");
+    const navigate = useNavigate(avatar);
+
+    // const [colorI, setColorI] = useState(0);
+    // useEffect(()=>{
+    //     setTimeout(()=>{
+    //         setColorI((colorI+1)%6);
+    //     },1000)
+    // },[colorI])
+    // const frameStyle = {
+    //     width:"65%",
+    //     height:"500px",
+    //     margin:"100px auto",
+    //     borderColor:colors[colorI],
+    //     boxShadow: `-3px 2px 9px 6px ${colors[colorI]}`,
+    // }
 
     async function getUserIdAndSetUser(){
         let resData = await axios.get(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/user/userId`); 
         let userId = resData.data.userId  + "-" + userName;
-        let user = {userId, userName, email, password};
+        let user = {userId, userName, email, avatar};
         setUser(user);
     }
 
     async function joinGame(){
         if(userName == ""){
-            swAlert("please enter your name");
+            // getAvatarList()
+            swAlert("please enter your nickname");
             return
         }
         await getUserIdAndSetUser();
@@ -93,7 +110,8 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
 
     async function goRoomList(){
         if(userName == ""){
-            swAlert("please enter your name");
+            // enterName()
+            swAlert("please enter your nickname");
             // alert("請輸入暱稱");
             return
         }
@@ -123,7 +141,7 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
             resData = resData.data.data;
             let access_token = resData.access_token;
             window.localStorage.setItem("access_token", access_token);
-            let user = {userId: resData.user.id, userName: resData.user.name, email, password};
+            let user = {userId: resData.user.id, userName: resData.user.name, email, avatar};
             setUser(user);
             navigate(`/rooms/`);
         }catch(err){
@@ -148,7 +166,7 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
             resData = resData.data.data;
             let access_token = resData.access_token;
             window.localStorage.setItem("access_token", access_token);
-            let user = {userId: resData.user.id, userName: resData.user.name, email, password};
+            let user = {userId: resData.user.id, userName: resData.user.name, email, avatar};
             setUser(user);
             navigate(`/rooms/`);
         }catch(err){
@@ -157,19 +175,23 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
         }
     }
     
+    async function chooseAvatar(){
+        let avatar = await getAvatarList();
+        setAvatar(avatar);
+    }
+    
     return(
-        <div className="frame_border" style={frameStyle}>
-            <div style={{textAlign:"center", fontSize:"50px", marginTop:"40px"}}>F u n . i o</div>
-
-
+        <div className="colorChange_border" style={frameStyle}>
+            <div style={{fontWeight:"600", textAlign:"center", fontSize:"50px", marginTop:"40px"}}>F u n . i o</div>
+            
             <div style={{display:"flex"}}>
                 <div style={innerBoxStyle}>
                     <div style={divFlexStyle}>
-                        <img src="https://avatars.dicebear.com/api/male/john.svg?mood[]=happy&mood[]=sad" style={{width:"100px", height:"100px", margin:"20px"}}></img>
+                        <img onClick={chooseAvatar} src="https://avatars.dicebear.com/api/male/john.svg?mood[]=happy&mood[]=sad" style={{cursor:"pointer", width:"100px", height:"100px", margin:"20px"}}></img>
                     </div>
                     <div style={divFlexStyle}>
                         <label>nickname </label>
-                        <input className="component_border" maxLength="20" type="text" style={inputStyle} onChange={(e)=>setUserName(e.target.value)}  placeHolder="enter nickname"/>
+                        <input className="component_border" maxLength="20" type="text" style={inputStyle} onChange={(e)=>setUserName(e.target.value)}  placeholder="nickname"/>
                     </div>
                     <div style={divFlexStyle}>
                         {/* <Link to="/rooms"> */}
@@ -185,15 +207,16 @@ const Home = ({setUser, tmpRoomId, setTmpRoomId}) =>{
 
                 <div style={innerBoxStyle}>
                     <div style={divFlexStyle} >
-                        <input  className="component_border" maxLength="30" type="email" style={inputStyle} placeHolder="enter name"/>
+                        <label style={lebelStyle}>name </label>
+                        <input  className="component_border" maxLength="30" type="text" style={inputStyle} onChange={(e)=>setUserName(e.target.value)} placeholder="name"/>
                     </div> 
                     <div style={divFlexStyle} >
                         <label style={lebelStyle}>e-mail </label>
-                        <input  className="component_border" maxLength="30" type="email" style={inputStyle} onChange={(e)=>setEmail(e.target.value)} placeHolder="enter email" />
+                        <input  className="component_border" maxLength="30" type="email" style={inputStyle} onChange={(e)=>setEmail(e.target.value)} placeholder="email" />
                     </div>
                     <div style={divFlexStyle} >
-                        <label style={lebelStyle} >password </label>
-                        <input  className="component_border" maxLength="30" type="password" style={inputStyle} onChange={(e)=>setPassword(e.target.value)} placeHolder="enter password" />
+                        <label style={lebelStyle} >Password </label>
+                        <input  className="component_border" maxLength="30" type="password" style={inputStyle} onChange={(e)=>setPassword(e.target.value)} placeholder="password" />
                     </div> 
                     <div style={divFlexStyle}>
                         {/* <Link to="/rooms"> */}

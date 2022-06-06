@@ -77,7 +77,7 @@ const ChatRoom = ({socket, riddle, user, room}) => {
             <div style={chatBannerStyle} className="frame_border">CHAT ROOM</div>
             <div  style={chatFrameStayle}>
                 {renderChat()}
-                <div ref={chatRef}></div>
+                <div ref={chatRef} style={{marginBottom:"20px"}}></div>
             </div>
             <form onSubmit={sendMessage}  >
                 <input onChange={onTextChange} style={chatInputStayle} value={message.text} className="answer_input"  type="text" name="answer"  placeholder="發送訊息"  maxLength="100" ></input>

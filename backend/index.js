@@ -21,7 +21,7 @@ const io = new Server(server, {
       origin: "*",  //"http://localhost:3001",
       methods: ["GET", "POST"]
     }
-  });
+});
 
 
 io.on('connection', (socket) => {
@@ -81,41 +81,40 @@ io.on('connection', (socket) => {
                 socket.leave(roomName);
             }
         }
-        socket.join(`draw--${room.roomId}`);
         socket.join(`roomAnswer--${room.roomId}`);
         socket.join(`roomChat--${room.roomId}`);
 
-        //通知roomLsit某room人數更新
         let ids = await io.in(`roomAnswer--${room.roomId}`).allSockets();
         let playerCount = ids.size;
         room.playerCount = playerCount;
-        io.emit("joinGame", room);
+        let newRoom = await incrRoomPlayer(room); //更新redis裡此room的playerList
+        
+        //通知roomLsit某room人數更新
+        io.emit("joinGame", newRoom);
 
         //通知game有人加入
-        socket.to(`roomAnswer--${room.roomId}`).emit("playerJoin",room);
-
-        //更新redis裡此room的playerCount
-        setRoomInfo(room)
+        socket.to(`roomAnswer--${room.roomId}`).emit("playerJoin", newRoom);
 
         socket.on('disconnect', () => {
-            socket.to(`roomAnswer--${room.roomId}`).emit("playerLeave",room); //通知game有人離開
-            io.emit("leaveGame", room) //通知roomLsit某room人數減少
-            decrRoomPlayer(room) //減少redis裡此room的playerCount
-            console.log('a user leave game');
+            console.log("flush disconnect", newRoom)
+            socket.to(`roomAnswer--${room.roomId}`).emit("playerLeave",newRoom); //通知game有人離開
+            io.emit("leaveGame", newRoom) //通知roomLsit某room人數減少
+            decrRoomPlayer(newRoom) //減少redis裡此room的playerCount
         });
 
-        io.to(`roomChat--${room.roomId}`).emit("joinGame","aaaaaaaa");
-        socket.to(`roomChat--${room.roomId}`).emit("joinGame","bbbbbbbbb");
-        socket.emit("joinGame","cccccccc");
+        console.log("socket on joinGame, ids",ids);
+        console.log("socket on joinGame, ids count",ids.size);
 
-        console.log("ids",ids)
-        console.log("ids count",ids.size)
-        // console.log("sids",io.sockets.adapter.rooms)
-        // console.log("sids",io.sockets.adapter.sids)
+        // console.log("sids",io.sockets.adapter.rooms) //取得全部room
+        // console.log("sids",io.sockets.adapter.sids) 
+        // io.to(`roomChat--${room.roomId}`).emit("joinGame","aaaaaaaa"); //房內全部
+        // socket.to(`roomChat--${room.roomId}`).emit("joinGame","bbbbbbbbb"); // 房內自己以外
+        // socket.emit("joinGame","cccccccc"); //全部自己以外
 
     });
 
     socket.on("leaveGame", async(room) => {
+        console.log("goback disconnect", room)
         for(roomName of socket.rooms){
             if(roomName.startsWith("roomAnswer--") || roomName.startsWith("roomChat--")){
                 socket.leave(roomName);
@@ -126,18 +125,20 @@ io.on('connection', (socket) => {
         socket.to(`roomAnswer--${room.roomId}`).emit("playerLeave", room); //通知game有人離開
         io.emit("leaveGame", room) //通知roomLsit某room人數減少
         decrRoomPlayer(room) //減少redis裡此room的playerCount
-        console.log('a user leave game');
     })
 
     socket.on("roomFree", (room) => {
         //通知roomList room.isStart false
         io.emit("roomFree", room);
     })
-    socket.on("gameStart", (room) => {
-        io.to(`roomAnswer--${room.roomId}`).emit("gameStart", room);
-        setRoomInfo(room);
-        //通知roomList room.isStart start
-        io.emit("roomStart", room);
+
+    //TODO: 原本有setRoomInfo()現在改成updatePlayerInRoom還未測試有沒有bug  //A有! 分數沒被更新至redis 從這裡emit newRoom 會沒分數
+    socket.on("gameStart", async (room) => {
+        await updatePlayerAndRoom (room); //更新房間資訊(玩家分數)到redis
+        let newRoom = await updatePlayerInRoom(room); //開始前都更新全部有哪些人及順序,避免不一致
+        io.to(`roomAnswer--${room.roomId}`).emit("gameStart", newRoom);
+        //通知roomList room.isStart == true
+        io.emit("roomStart", newRoom);
     })
     socket.on("gameRiddle", (room) => {
         io.to(`roomAnswer--${room.roomId}`).emit("gameRiddle", room);
@@ -160,38 +161,71 @@ io.on('connection', (socket) => {
     socket.on("chat", ({message, room}) => {
         io.to(`roomChat--${room.roomId}`).emit("chat", message);
     })
-    socket.on("bingo", (room) => {
+    socket.on("bingo", async(room) => {
         console.log("socket.on(bingo", room)
+       
         io.to(`roomAnswer--${room.roomId}`).emit("bingo", room);
     })
-
 });
 
-async function setRoomInfo(room){
-    const ROOM_PREFIX = "room--";
-    // let redisRoom = await redisClient.get((ROOM_PREFIX + room.roomId));
-    // if(!redisRoom){
-    //     return;
-    // }
-    // redisRoom = JSON.parse(redisRoom)
-    // redisRoom.playerCount = room.playerCount;
-    await redisClient.set((ROOM_PREFIX + room.roomId), JSON.stringify(room));
-    redisClient.expire((ROOM_PREFIX + room.roomId), 60 * 30)
+
+const ROOM_PREFIX = "room:";
+const ROOMP_PREFIX = "roomP:"; //區別用 讓keys(room:*)只取得到room
+const ROOM_PLAYER_INCR_PREFIX = "roomIncr"
+const ROOM_EXPIRE = 60 * 30;
+
+async function incrRoomPlayer(room){
+    const playerKey = ROOMP_PREFIX + room.roomId + ":playerList";
+    const playerIncrKey = ROOM_PLAYER_INCR_PREFIX + room.roomId;
+
+    room.currUser.order = await redisClient.incr(playerIncrKey); //紀錄進來的順序
+    await redisClient.hSet(playerKey, room.currUserId, JSON.stringify(room.currUser));
+    let newRoom = await updatePlayerInRoom(room);
+    return newRoom;
 }
 
 async function decrRoomPlayer(room){
-    const ROOM_PREFIX = "room--";
-    let redisRoom = await redisClient.get((ROOM_PREFIX + room.roomId));
+    const roomKey = ROOM_PREFIX + room.roomId
+    const playerKey = ROOMP_PREFIX + room.roomId + ":playerList";
+
+    let redisRoom = await redisClient.get((roomKey));
     if(!redisRoom){
         return;
     }
     redisRoom = JSON.parse(redisRoom);
-    let newPlayerList = redisRoom.playerList.filter((player) => player.userId != room.currUserId);
-    redisRoom.playerList = newPlayerList;
-    redisRoom.playerCount = newPlayerList.length;
-    await redisClient.set((ROOM_PREFIX + room.roomId), JSON.stringify(redisRoom));
-    redisClient.expire((ROOM_PREFIX + room.roomId), 60 * 30);
+    await redisClient.hDel(playerKey, room.currUserId);
+    updatePlayerInRoom (redisRoom);
 }
+
+async function updatePlayerInRoom (room) {
+    const roomKey = ROOM_PREFIX + room.roomId
+    const playerKey = ROOMP_PREFIX + room.roomId + ":playerList";
+    const playerIncrKey = ROOM_PLAYER_INCR_PREFIX + room.roomId;
+
+    let  playerList = await redisClient.hVals(playerKey); //get hset all value by key
+    playerList = playerList.map( user => JSON.parse(user));
+    playerList.sort((a, b) => (a.order - b.order));
+    room.playerList = playerList;
+    room.playerCount = playerList.length; 
+    await redisClient.set(roomKey, JSON.stringify(room));
+    redisClient.expire(roomKey, ROOM_EXPIRE);
+    redisClient.expire(playerKey, ROOM_EXPIRE);
+    redisClient.expire(playerIncrKey, ROOM_EXPIRE);
+    return room;
+}
+
+
+async function updatePlayerAndRoom (room) {
+    const roomKey = ROOM_PREFIX + room.roomId
+    const playerKey = ROOMP_PREFIX + room.roomId + ":playerList";
+    
+    await redisClient.set(roomKey, JSON.stringify(room));
+    for(let player of room.playerList){
+        await redisClient.hSet(playerKey, player.userId, JSON.stringify(player));
+    }
+}
+
+
 
 
 

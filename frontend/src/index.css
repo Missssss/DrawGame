@@ -42,7 +42,7 @@ time, mark, audio, video, button, input {
   font-size:20px ;
 }
 button:hover{
-  background: paleturquoise;
+  background: #A5CAD3;
 }
 
 div::-webkit-scrollbar{
@@ -66,6 +66,37 @@ div::-webkit-scrollbar-thumb {
   border-color: black;
   border-radius: 20px;
   /* box-shadow: -3px 2px 9px 6px blue; */
+}
+
+.colorChange_border {
+  border-style: solid;
+  border-width: 4px;
+  border-color: black;
+  border-radius: 20px;
+  animation:bordermove 4s infinite; /*animation 时间 播放次数*/  
+  animation-direction:alternate; /*是否循環交替反向播放*/ 
+  -webkit-animation:bordermove 3s infinite;/*Safari 和 Chrome:*/
+}
+@keyframes bordermove  {
+  0% {border-color:#87CEFF;}
+  0%{box-shadow: -3px 2px 9px 6px rgb(78, 78, 236)}  
+  25% {border-color:#54FF9F;}
+  35%{box-shadow: -3px 2px 9px 6px rgb(46, 46, 249)}
+  50% {border-color:#7CCD7C;} 
+  60%{box-shadow: -3px 2px 9px 6px #36f736}
+  75% {border-color:#63B8FF;} 
+  85%{box-shadow: -3px 2px 9px 6px rgb(66, 66, 218)}
+  100% {border-color:#00FFFF;}
+  100%{box-shadow: -3px 2px 9px 6px #35c1c1} 
+}  
+ 
+	/*Safari 和 Chrome:*/
+@-webkit-keyframes bordermove{
+  0% {border-color:#87CEFF;}
+  25% {border-color:#54FF9F;}
+  50% {border-color:#7CCD7C;}
+  75% {border-color:#63B8FF;}
+  100% {border-color:#00FFFF;}
 }
 
 .component_border {

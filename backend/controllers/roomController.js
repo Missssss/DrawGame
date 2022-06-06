@@ -1,7 +1,7 @@
 const { v4: uuidv4 } = require('uuid');
 const redisClient =  require("../util/redis");
 const ROOM_EXPIRE = 60 * 50;  //先設置5分鐘房間會被銷毀
-const ROOM_PREFIX = "room--"
+const ROOM_PREFIX = "room:"
 
 // await client.set('key', JSON.stringify(camp));
 // const value = await client.get('key');

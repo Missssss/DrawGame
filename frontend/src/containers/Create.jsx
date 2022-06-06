@@ -7,7 +7,7 @@ import axios from 'axios';
 const frameStyle = {
     width:"40%",
     height:"500px",
-    margin:"50px auto",
+    margin:"120px auto",
     // backgroundColor:"palegreen",
 }
 const divFlexStyle = {
@@ -62,7 +62,7 @@ const Create = ({setRoomInfo, socket}) =>{
     },[mode, theme, playerLimit, score])
 
     return (
-        <div style={frameStyle} className="frame_border" >
+        <div style={frameStyle} className="colorChange_border" >
             <div style={{textAlign:"center", fontSize:"40px", margin:"30px auto 30px"}}>配置</div>
             
             <div style={divFlexStyle}>
@@ -97,6 +97,7 @@ const Create = ({setRoomInfo, socket}) =>{
             <div style={divFlexStyle}>
                 <label style={lebelStyle}>目標分數</label>
                 <select  style={inputStyle} className="component_border" onChange={(e)=>setScore(e.target.value)}>
+                    <option value="20">20</option>
                     <option value="50">50</option>
                     <option value="70">70</option>
                     <option value="100">100</option>

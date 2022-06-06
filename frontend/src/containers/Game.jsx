@@ -20,22 +20,17 @@ const divFlexStyle = {
     display: "flex",
     justifyContent: "center", 
     alignItems:"center",
-    // borderWidth:"1px"
-    // marginTop: "20px",
 }
 const drawStyle = {
     position:"relative",
     height:"400px",
     margin:"5px",
-    // backgroundColor:"paleturquoise",
     boxSizing: "border-box",
 }
 const ChatStyle = {
     width:"50%",
     height:"200px",
     margin:"5px",
-    // overflow:"auto",
-    // backgroundColor:"paleturquoise",
     boxSizing:"border-box",
     position:"relative",
 }
@@ -70,7 +65,7 @@ const playerInfoStyle = {
 const ROUND_DURATION = 50;
 const CHOICE_DURATION = 10;
 const MISS_DURATION = 8;
-const BREAK_DURATION = 10;
+const BREAK_DURATION = 7;
 const RANK_DURATION = 20;
 const BONUS = 3
 
@@ -101,32 +96,33 @@ const Game = ({socket, user, setTmpRoomId}) =>{
     // console.log("socket.id:", socket.id);
     // console.log("playerList:", playerList);
     useEffect(() => {
+        if(!user.userId || ""){
+            setTmpRoomId(roomId);
+            swAlert("please enter your nickname");
+            navigate("/");
+            return
+        }
         async function gameInit(){
-            if(!user.userId || ""){
-                setTmpRoomId(roomId);
-                swAlert("please enter your name");
-                navigate("/");
-            }
-
             try{
                 let resData = await axios.get(`${process.env.REACT_APP_DOMAIN_URL}/api/1.0/room/${roomId}`);
                 let gameRoom = resData.data;
                 if(gameRoom.playerCount >= gameRoom.playerLimit){
-                    alert("人數已滿");
+                    swAlert("人數已滿");
                     navigate("/rooms")
                     return;
                 }
-                // if(gameRoom.isStart){
-                //     alert("遊戲已開始\n請選擇其他房間");
-                //     navigate("/rooms")
-                //     return;
-                // }
+                if(gameRoom.isStart){
+                    swAlert("遊戲已開始\n可以選擇其他房間");
+                    navigate("/rooms")
+                    return;
+                }
                 let newPlayerList = gameRoom.playerList.filter((player) => player.userId != user.userId);
                 user.score = 0;
                 newPlayerList.push(user);
                 gameRoom.playerList = newPlayerList;
                 gameRoom.currUserId = user.userId;  //記錄此client的使用者 當要刪掉時很好用
-                gameRoom.holder = newPlayerList[0];
+                gameRoom.currUser = user;
+                gameRoom.holder = newPlayerList[0]; 
 
                 //第0 round holder先
                 // if(round == 0 && newPlayerList[0].userId == user.userId){
@@ -183,13 +179,13 @@ const Game = ({socket, user, setTmpRoomId}) =>{
             });
         })
         socket.on("gameStart", (room) => {
+            console.log("socket.on gameStart", room.drawUser)
             setIsStart(true);
             setDuration(ROUND_DURATION);
-            if(room.drawUser.userId == gameInfo.currUserId){
+            if(room.drawUser.userId == user.userId){
                 setIsYourTurn(true);
             }
             setPlayerAndGame(room);
-            console.log("socket.on gameStart", room.drawUser)
         })
         socket.on("gameRiddle", (room) => {
             setRiddle(room.riddle);
@@ -295,6 +291,11 @@ const Game = ({socket, user, setTmpRoomId}) =>{
     },[canSocketInit])
 
     useEffect(() => {
+        if(!gameInfo){
+            return;
+        }
+        console.log("useEffect playerList========",gameInfo);
+        console.log("useEffect playerList========",playerList);
         if(playerList[0]){
             setGameInfo( pre => {
                 pre.holder = playerList[0];
@@ -304,8 +305,8 @@ const Game = ({socket, user, setTmpRoomId}) =>{
         if(playerList.length <= 1){
             setIsStart(false);
             socket.emit("roomFree",{...gameInfo, isStart:false});
-            console.log("roomFreeroomFreeroomFree",{...gameInfo})
-            console.log("roomFreeroomFreeroomFree",{...gameInfo, isStart:false})
+            console.log("roomFreeAAAAAA",{...gameInfo})
+            console.log("roomFreeBBBBBB",{...gameInfo, isStart:false})
         }
     },[playerList])
 
@@ -406,7 +407,6 @@ const Game = ({socket, user, setTmpRoomId}) =>{
             color:"#2376DD",
             fontSize:"22px",
             fontWeight:"600"
-            // backgroundColor:"palegreen",
         }
 
         if(!gameInfo){
@@ -443,24 +443,29 @@ const Game = ({socket, user, setTmpRoomId}) =>{
     }
 
     const choiceView = () => {
+        const choiceDivStyle = {
+            position:"absolute",
+            left: "280px",
+            top:"130px",
+            color:"#2376DD",
+            fontSize:"22px",
+            fontWeight:"600",
+        }
         const riddleFlexStyle = {
             position:"absolute",
             left: "130px",
-            top:"150px",
+            top:"170px",
             display: "flex",
             justifyContent: "center", 
             alignItems:"center",
-            // marginTop: "20px",
         }
-
         const riddleButtonStyle = {
             width:"150px",
             height:"40px",
-            margin:"10px 10px",
+            margin:"10px 15px",
             boxSizing:"content-box",
             bottom: "10px",
             cursor: "pointer",
-            // backgroundColor:"palegreen",
         }
         let riddleList = ["窗戶","桌子","椅子","門","電腦","滑鼠"];
         let randomCount = Math.round(Math.random() * 1000);
@@ -477,16 +482,19 @@ const Game = ({socket, user, setTmpRoomId}) =>{
         }
 
         return(
+            <>
+            <div style={choiceDivStyle}>請選擇謎底</div>
             <div style={riddleFlexStyle}>
                 <button onClick={chooseRiddle} className="component_border" style={riddleButtonStyle}>{riddleList[randomCount % 6]}</button>
                 <button onClick={chooseRiddle} className="component_border" style={riddleButtonStyle}>{riddleList[(randomCount + 1) % 6]}</button>
             </div>
+            </>
         )
        
     }
 
     const missView = () => {
-        const startButtonStyle = {
+        const missStyle = {
             position:"absolute",
             left: "250px",
             top:"150px",
@@ -496,11 +504,13 @@ const Game = ({socket, user, setTmpRoomId}) =>{
             boxSizing:"content-box",
             bottom: "10px",
             cursor: "pointer",
-            // backgroundColor:"palegreen",
+            color:"#2376DD",
+            fontSize:"22px",
+            fontWeight:"600",
         }
         if(isMiss){
             return(
-                <div style={startButtonStyle}>{gameInfo.drawUser.userName}錯過他的回合...</div>
+                <div style={missStyle}>{gameInfo.drawUser.userName}錯過他的回合...</div>
             )
         }
     }
@@ -508,7 +518,7 @@ const Game = ({socket, user, setTmpRoomId}) =>{
     const breakiView = () => {
         const breakStyle = {
             position:"absolute",
-            left: "250px",
+            left: "230px",
             top:"150px",
             width:"300px",
             height:"40px",
@@ -521,10 +531,10 @@ const Game = ({socket, user, setTmpRoomId}) =>{
             return(
                 <div style={breakStyle}>
                     {bingoCountRef.current >= playerList.length - 1
-                        ?<div style={{margin:"5px auto"}}>太棒了! 大家都答對了</div>
-                        :<div style={{margin:"5px 20px"}}>謎底是: {riddle}</div>
+                        ?<div style={{margin:"5px 0px", color:"#2376DD", fontSize:"22px", fontWeight:"600"}}>太棒了! 大家都答對了</div>
+                        :<div style={{margin:"5px 30px", color:"#2376DD", fontSize:"22px", fontWeight:"600"}}>謎底是: {riddle}</div>
                     }
-                    <div style={{margin:"5px auto"}}>下回合即將開始...</div>
+                    <div style={{margin:"5px 15px", color:"#2376DD", fontSize:"22px" ,fontWeight:"600"}}>下回合即將開始...</div>
                 </div>
             )
         }
@@ -534,13 +544,16 @@ const Game = ({socket, user, setTmpRoomId}) =>{
         const rankStyle = {
             position:"absolute",
             left: "240px",
-            top:"30px",
+            top:"15px",
             width:"400px",
             height:"100px",
             margin:"10px",
         }
         const rankPlayerStyle = {
             margin:"10px 16px",
+            color:"#2376DD",
+            fontSize:"22px",
+            fontWeight:"600",
         }
         const rankImgStyle = {
             width:"150px",
@@ -583,6 +596,7 @@ const Game = ({socket, user, setTmpRoomId}) =>{
         newGameInfo.playerList = room.playerList;
         newGameInfo.playerCount = room.playerList.length;
         newGameInfo.currUserId = user.userId;
+        newGameInfo.currUser = user;
         newGameInfo.holder = room.playerList[0];
         newGameInfo.drawUser = room.drawUser
         setGameInfo(newGameInfo);
@@ -598,10 +612,10 @@ const Game = ({socket, user, setTmpRoomId}) =>{
                 {playerList.map((player) => {
                         return <div key={player.userId} style={playerStyle} className="component_border">
                                     <div style={divFlexStyle} >
-                                        <img style={avatarStyle} src={require(`../img/${avatar[Math.floor(Math.random()*15)]}.gif`)} /*</div>className="component_border"*/></img>
+                                        <img style={avatarStyle} src={require(`../img/${user.avatar || avatar[Math.floor(Math.random()*15)]}.gif`)} /*</div>className="component_border"*/></img>
                                         <div style={{width:"50%"}}>
                                             <div style={playerInfoStyle} /*className="component_border"*/ >{player.userName}</div>
-                                            <div style={playerInfoStyle} /*className="component_border"*/ >得分 <span style={{fontSize:"25px", color:"#2376DD"}}>{player.score || 130}</span></div> 
+                                            <div style={playerInfoStyle} /*className="component_border"*/ >得分 <span style={{fontSize:"25px", color:"#2376DD"}}>{player.score || 0}</span></div> 
                                         </div>
                                     </div>
                                 </div>

@@ -108,7 +108,7 @@ const AnswerRoom = ({socket, riddle, user, room, isDrawFinish, isDrawingRef, isS
             <div style={chatBannerStyle} className="frame_border">ANSWER</div>
             <div  style={chatFrameStayle}>
                 {renderChat()}
-                <div ref={chatRef}></div>
+                <div ref={chatRef} style={{marginBottom:"20px"}}></div>
             </div>
             <form onSubmit={sendMessage}>
                 {isDrawingRef.current 

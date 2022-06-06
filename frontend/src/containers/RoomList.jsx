@@ -174,7 +174,7 @@ const RoomList = ({socket}) =>{
 
     return (
         <div style={frameStyle} className="frame_border">
-            <div style={{textAlign:"center", fontSize:"40px", margin:"20px auto 0px"}}>GAME ROOM</div>
+            <div style={{textAlign:"center", fontSize:"40px", fontWeight:"600", margin:"20px auto 0px"}}>GAME ROOM</div>
             <div style={roomListStyle} className="frame_border">
                 {roomList.map((room, index) => {
                     return <Room 
