@@ -10,7 +10,6 @@ import AnswerRoom from '../components/game/AnswerRoom';
 import ChatRoom from '../components/game/ChatRoom';
 import { swAlert, enterName } from '../util/alert';
 
-
 const frameStyle = {
     width:"1000px",
     height:"600px",
@@ -60,11 +59,11 @@ const avatarStyle = {
     backgroundImage: "url(/../img/general.gif)",
 }
 const playerInfoStyle = {
-    fontSize:"16px",
+    fontSize:"20px",
     fontWeight:"600",
     // color:"#138FE8",
     width:"100%",
-    height:"20px",
+    height:"25px",
     overflow:"hidden",
 }
 
@@ -404,6 +403,9 @@ const Game = ({socket, user, setTmpRoomId}) =>{
             boxSizing:"content-box",
             bottom: "10px",
             cursor: "pointer",
+            color:"#2376DD",
+            fontSize:"22px",
+            fontWeight:"600"
             // backgroundColor:"palegreen",
         }
 
@@ -426,8 +428,8 @@ const Game = ({socket, user, setTmpRoomId}) =>{
         if(holderId == user.userId && playerList.length > 1){
             return(
                 <div style={startButtonStyle}>
-                    <div>其他玩家等你開始...</div>
-                    <button onClick={goStart} style={{width:"150px", height:"40px",margin:"20px 0px"}} className="component_border">開始</button>
+                    <div style={{color:"#2376DD", fontSize:"22px"}}>其他玩家等你開始...</div>
+                    <button onClick={goStart} style={{ width:"150px", height:"40px",margin:"20px 6px"}} className="component_border">開始</button>
                 </div>
                 
             )
@@ -599,7 +601,7 @@ const Game = ({socket, user, setTmpRoomId}) =>{
                                         <img style={avatarStyle} src={require(`../img/${avatar[Math.floor(Math.random()*15)]}.gif`)} /*</div>className="component_border"*/></img>
                                         <div style={{width:"50%"}}>
                                             <div style={playerInfoStyle} /*className="component_border"*/ >{player.userName}</div>
-                                            <div style={playerInfoStyle} /*className="component_border"*/ >得分 {player.score || 0}</div>
+                                            <div style={playerInfoStyle} /*className="component_border"*/ >得分 <span style={{fontSize:"25px", color:"#2376DD"}}>{player.score || 130}</span></div> 
                                         </div>
                                     </div>
                                 </div>

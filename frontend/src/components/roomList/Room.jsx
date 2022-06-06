@@ -25,13 +25,13 @@ const roomInfoStyle = {
     margin: "5px",
 }
 const playerCurrenStyle = {
-    fontSize:"13px",
+    fontSize:"16px",
     textAlign:"left",
     width:"20%",
     height:"10%",
 }
 const scoreCurrenStyle = {
-    fontSize:"13px",
+    fontSize:"16px",
     textAlign:"left",
     width:"20%",
     height:"10%",
